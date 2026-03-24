@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.env
+.pytest_cache/
+data/processed/
+data/synthetic/
+models/
+*.pkl
+*.pickle
+*.log
+*.DS_Store

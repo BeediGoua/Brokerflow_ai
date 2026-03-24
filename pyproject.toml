@@ -1,0 +1,15 @@
+[
+    project
+]
+name = "brokerflow-ai"
+version = "0.1.0"
+description = "Underwriting copilot with synthetic data, ML pipeline, agents and API"
+requires-python = ">=3.8"
+readme = "README.md"
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"

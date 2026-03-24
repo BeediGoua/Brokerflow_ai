@@ -1,0 +1,1 @@
+"""Agent layer implementing note parsing, review and summary generation."""

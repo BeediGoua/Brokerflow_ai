@@ -1,0 +1,1 @@
+"""Business rule layer for recommendation and consistency checking."""
