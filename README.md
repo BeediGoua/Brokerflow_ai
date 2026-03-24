@@ -34,6 +34,18 @@ Pipeline simple et lisible:
 4. Optimisation d'un seuil opérationnel.
 5. Politique de décision V2: score + seuil + complétude + sévérité d'alertes.
 
+**Vue d'ensemble pipeline:**
+
+```
+Données brutes (CSV) → Feature Engineering → Modèle logistique
+                                                     ↓
+                                            Score risque (0-1)
+                                                     ↓
+                                        Seuil optimal + Règles V2
+                                                     ↓
+                                   Recommandation (APPROVE/REVIEW/DECLINE)
+```
+
 Comparaison modèles (simple):
 
 1. Benchmark baseline vs challengers avec trois options:
@@ -78,6 +90,25 @@ Pourquoi:
 2. Gain important en rappel et F1 versus le seuil naïf.
 3. Décision auditée via `decision_reason_codes`, `decision_alert_severity`, `decision_completeness_bucket`.
 
+**Flux décisionnel V2:**
+
+```
+Score calibré
+    ↓
+Score < 0.2309?
+    ├─ Oui → APPROVE (risque faible)
+    └─ Non (score ≥ 0.2309)
+        ↓
+        Alertes structurées?
+        ├─ Oui → REVIEW (risque modéré + signaux)
+        └─ Non → DECLINE (risque élevé)
+        
+Chaque décision inclut:
+- reason_codes (motifs explicites)
+- alert_severity (criticité des alertes)
+- completeness_bucket (qualité des données)
+```
+
 ## Trade-offs et contraintes
 
 Trade-off principal (seuil):
@@ -114,15 +145,47 @@ Le runtime de scoring est unifié autour de l'artefact calibré:
 4. Décision métier: `src/rules/business_rules.py` (V2)
 5. Alertes structurées: `src/rules/consistency_checks.py`, `POST /v1/review-detailed`
 
-Flux principal recommandé pour présentation:
+**Deux parcours coexistent:**
 
-1. Notebooks réels: `04 -> 05 -> 06`
-2. API/Runtime: `POST /v2/score`
-3. Comparaison modèles: `notebooks/09_champion_challenger_comparison.ipynb`
+```
+┌─────────────────────────────────────────────┐
+│         PARCOURS RÉEL (Analytique)          │
+├─────────────────────────────────────────────┤
+│ notebooks/04 → 05 → 06                      │
+│ Data Zindi → Features → Modèle calibré     │
+│ ↓                                           │
+│ models/logreg_raw.pkl                       │
+│ models/best_threshold.txt                   │
+│ Artifacts: metrics, coefficients, report   │
+└─────────────────────────────────────────────┘
 
-Flux démo synthétique:
+┌─────────────────────────────────────────────┐
+│       PARCOURS DÉMO (Application UI)        │
+├─────────────────────────────────────────────┤
+│ Données synthétiques → Modèle baseline      │
+│ API /v2/score ← runtime calibré             │
+│ Streamlit dashboard (single case, batch)    │
+│ Alertes structurées + recommandation        │
+└─────────────────────────────────────────────┘
 
-1. Conservé pour démonstration UI rapide, non prioritaire pour l'histoire métier.
+Both feed runtime_loader → same decision engine
+```
+
+**Endpoints API:**
+
+```
+POST /v1/score
+  - Route de compatibilité
+  - Input: features JSON
+  - Output: score_0_1, prediction, alerts
+
+POST /v2/score  
+  - Route cible (calibrée)
+  - Output: + decision_reason_codes, alert_severity, completeness_bucket
+
+POST /v1/review-detailed
+  - Taxonomie d'alertes structurées
+```
 
 ## Impact métier à suivre
 
@@ -148,6 +211,19 @@ make challenge
 make run
 streamlit run src/ui/app.py
 ```
+
+**Pages disponibles dans l'application Streamlit:**
+
+| Page | Profil | Utilité |
+|---|---|---|
+| 🏦 Home | Tous | Pitch, KPIs, navigation |
+| 📋 Upload Case | Underwriter | Scorer un dossier, décision immédiate |
+| 🔎 Case Result | Underwriter | Explorer des cas pré-scorés |
+| 📦 Batch Dashboard | Analyste | Traiter un CSV de dossiers |
+| 🔍 Data Explorer | Analyste | Distributions, variables, défauts |
+| 🎚️ Threshold Simulator | Risk Manager | Simuler l'impact du seuil |
+| 📐 Model Performance | Data Scientist | Métriques, benchmark challengers |
+| 📖 Methodology | Compliance | Protocole V2, alertes, limites |
 
 ### Parcours réel notebook
 
