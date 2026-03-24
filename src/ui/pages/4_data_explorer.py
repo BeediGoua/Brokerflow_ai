@@ -13,6 +13,14 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
+_CSS_PATH = Path(__file__).parent.parent / "style.css"
+
+
+def _load_css() -> None:
+    if _CSS_PATH.exists():
+        st.markdown(f"<style>{_CSS_PATH.read_text()}</style>", unsafe_allow_html=True)
+
+
 DATA_CANDIDATES = [
     Path("data/processed/train_features.csv"),
     Path("data/processed/train_enriched.csv"),
@@ -28,8 +36,9 @@ def _load_data():
 
 
 def main() -> None:
-    st.set_page_config(page_title="Data Explorer", page_icon="🔍", layout="wide")
-    st.title("🔍 Data Explorer — Analyse du portefeuille")
+    st.set_page_config(page_title="Data Explorer", page_icon=None, layout="wide")
+    _load_css()
+    st.title("Data Explorer — Analyse du portefeuille")
     st.markdown(
         "Comprendre les distributions, l'équilibre des classes et les facteurs de risque. "
         "Utilisez ce panneau pour identifier les segments les plus exposés."

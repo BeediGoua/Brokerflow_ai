@@ -10,9 +10,19 @@ Simulation basée sur un modèle synthétique calibré sur les paramètres connu
   AUC = 0.7277, seuil optimal = 0.2309
 """
 
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import streamlit as st
+
+_CSS_PATH = Path(__file__).parent.parent / "style.css"
+
+
+def _load_css() -> None:
+    if _CSS_PATH.exists():
+        st.markdown(f"<style>{_CSS_PATH.read_text()}</style>", unsafe_allow_html=True)
+
 
 KNOWN_AUC = 0.7277
 N_SAMPLES = 3000
@@ -83,8 +93,9 @@ def _build_curves():
 
 
 def main() -> None:
-    st.set_page_config(page_title="Threshold Simulator", page_icon="🎚️", layout="wide")
-    st.title("🎚️ Threshold Simulator — Impact du seuil de décision")
+    st.set_page_config(page_title="Threshold Simulator", page_icon=None, layout="wide")
+    _load_css()
+    st.title("Threshold Simulator — Impact du seuil de décision")
     st.markdown(
         "Simuler l'impact du seuil de décision sur la détection des défauts et la distribution "
         "des décisions APPROVE / REVIEW / DECLINE. "
@@ -142,7 +153,7 @@ def main() -> None:
         st.subheader("Distribution des décisions")
         decision_df = pd.DataFrame(
             {
-                "Décision": ["✅ APPROVE", "⚠️ REVIEW/DECLINE"],
+                "Décision": ["APPROVE", "REVIEW/DECLINE"],
                 "%": [current["approve_pct"], current["flag_pct"]],
             }
         ).set_index("Décision")
@@ -179,22 +190,22 @@ def main() -> None:
     st.subheader("Interprétation métier")
     if threshold < 0.15:
         st.warning(
-            "⚠️ Seuil très bas : presque tous les dossiers sont flaggés. "
+            "Seuil très bas : presque tous les dossiers sont flaggés. "
             "Coût opérationnel très élevé, peu de valeur ajoutée."
         )
     elif threshold <= 0.30:
         st.success(
-            "✅ Zone équilibrée : bonne détection des défauts, revue ciblée. "
+            "Zone équilibrée : bonne détection des défauts, revue ciblée. "
             "Recommandé pour un contexte underwriting orienté maîtrise du risque."
         )
     elif threshold <= 0.50:
         st.info(
-            "ℹ️ Zone modérée : moins de faux positifs, mais davantage de défauts manqués. "
+            "Zone modérée : moins de faux positifs, mais davantage de défauts manqués. "
             "À privilégier si le coût de la revue manuelle est élevé."
         )
     else:
         st.error(
-            "🔴 Seuil élevé : beaucoup de défauts non détectés. "
+            "Seuil élevé : beaucoup de défauts non détectés. "
             "Risque portefeuille non maîtrisé — à éviter en contexte underwriting strict."
         )
 

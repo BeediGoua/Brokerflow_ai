@@ -216,14 +216,14 @@ streamlit run src/ui/app.py
 
 | Page | Profil | Utilité |
 |---|---|---|
-| 🏦 Home | Tous | Pitch, KPIs, navigation |
-| 📋 Upload Case | Underwriter | Scorer un dossier, décision immédiate |
-| 🔎 Case Result | Underwriter | Explorer des cas pré-scorés |
-| 📦 Batch Dashboard | Analyste | Traiter un CSV de dossiers |
-| 🔍 Data Explorer | Analyste | Distributions, variables, défauts |
-| 🎚️ Threshold Simulator | Risk Manager | Simuler l'impact du seuil |
-| 📐 Model Performance | Data Scientist | Métriques, benchmark challengers |
-| 📖 Methodology | Compliance | Protocole V2, alertes, limites |
+| Home | Tous | Pitch, KPIs, navigation |
+| Upload Case | Underwriter | Scorer un dossier, décision immédiate |
+| Case Result | Underwriter | Explorer des cas pré-scorés |
+| Batch Dashboard | Analyste | Traiter un CSV de dossiers |
+| Data Explorer | Analyste | Distributions, variables, défauts |
+| Threshold Simulator | Risk Manager | Simuler l'impact du seuil |
+| Model Performance | Data Scientist | Métriques, benchmark challengers |
+| Methodology | Compliance | Protocole V2, alertes, limites |
 
 ### Parcours réel notebook
 

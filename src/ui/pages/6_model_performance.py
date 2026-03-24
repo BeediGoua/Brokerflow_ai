@@ -13,14 +13,23 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
+_CSS_PATH = Path(__file__).parent.parent / "style.css"
+
+
+def _load_css() -> None:
+    if _CSS_PATH.exists():
+        st.markdown(f"<style>{_CSS_PATH.read_text()}</style>", unsafe_allow_html=True)
+
+
 METRICS_PATH = Path("models/raw_baselines_metrics.csv")
 CHALLENGER_CSV = Path("models/challenger_metrics.csv")
 CHALLENGER_WINNER = Path("models/challenger_winner.json")
 
 
 def main() -> None:
-    st.set_page_config(page_title="Model Performance", page_icon="📐", layout="wide")
-    st.title("📐 Model Performance — Validation et benchmark")
+    st.set_page_config(page_title="Model Performance", page_icon=None, layout="wide")
+    _load_css()
+    st.title("Model Performance — Validation et benchmark")
     st.markdown(
         "Évaluer la robustesse du modèle principal et comparer "
         "baseline vs challengers (régression logistique / LightGBM / stacking)."
@@ -89,7 +98,7 @@ def main() -> None:
         winner_threshold = winner.get("winner_threshold_best_f1", "N/A")
         winner_rule = winner.get("selection_rule", "N/A")
         st.success(
-            f"🏆 Modèle gagnant : **{winner_name}** "
+            f"Modèle gagnant : **{winner_name}** "
             f"| Seuil : {winner_threshold} "
             f"| Règle de sélection : {winner_rule}"
         )
