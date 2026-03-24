@@ -25,6 +25,11 @@ class Settings(BaseSettings):
     env: str = "dev"
     model_path: str = "models/baseline_logreg.pkl"
     preprocessor_path: str = "models/preprocessor.pkl"
+    raw_runtime_bundle_path: str = "models/logreg_raw_runtime_bundle.joblib"
+    raw_runtime_manifest_path: str = "models/logreg_raw_runtime_manifest.json"
+    raw_runtime_artifact_path: str = "models/logreg_raw.pkl"
+    raw_runtime_threshold_path: str = "models/best_threshold.txt"
+    raw_runtime_coefficients_path: str = "models/model_coefficients.csv"
 
     class Config:
         env_file = ".env"

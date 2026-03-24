@@ -1,24 +1,67 @@
 # Architecture
 
-This document provides an overview of the major components in the BrokerFlow AI project and how they interact.
+Ce document résume l'architecture actuelle de BrokerFlow AI et la coexistence de deux parcours (analytique réel et runtime démo).
 
-## Layers
+## Vue d'ensemble
 
-1. **Data Intake** – Handles loading of CSV/JSON inputs as well as generating synthetic data via `src/data/generate_synthetic_cases.py`.
-2. **Preprocessing** – Casts columns to appropriate dtypes and imputes missing values (`src/data/preprocess.py`).
-3. **Feature Engineering** – Derives new variables such as ratios and buckets (`src/features/build_features.py`) and computes a completeness score (`src/features/completeness.py`).
-4. **Model Training** – Trains baseline (logistic regression) and candidate (LightGBM) models (`src/models/train_baseline.py`, `src/models/train_lgbm.py`).  Models and preprocessors are saved into the `models/` directory.
-5. **Prediction & Explainability** – Loads saved models to produce scores (`src/models/predict.py`) and computes contributions for explanation (`src/explain/feature_importance.py`, `src/explain/local_explanations.py`).
-6. **Business Rules** – Applies simple rules to derive the recommended action based on the score, completeness and detected alerts (`src/rules/business_rules.py`).
-7. **Agents** – Parses the free‑text note (`src/agents/note_parser.py`), reviews inconsistencies (`src/agents/reviewer.py`) and writes a summary (`src/agents/summary_writer.py`).
-8. **API & UI** – Serves predictions via FastAPI (`src/api/`) and offers a Streamlit front‑end (`src/ui/`).
+Le projet comporte deux couches complémentaires:
 
-## Flow
+1. Couche analytique notebook sur données Zindi brutes.
+2. Couche applicative API/UI historique pour démonstration rapide.
 
-1. **Generate or load data** – Use the synthetic generator or load external CSV files under `data/raw/`.
-2. **Preprocess and engineer features** – Clean and enrich the data.
-3. **Train models** – Fit the baseline and candidate models and save them.
-4. **Score new applications** – The API accepts application data, runs the pipeline, obtains the risk score, applies business rules and returns the summary.
-5. **Review** – The reviewer agent flags any inconsistencies or missing documents.
+## Composants principaux
 
-The design emphasises separation of concerns and testability.  Each module has a clear responsibility and can be unit tested in isolation.
+1. Data intake
+	- Chargement des données brutes compétition via `src/data/raw_competition.py`.
+	- Génération de données synthétiques via `src/data/generate_synthetic_cases.py`.
+
+2. Prétraitement et features
+	- Prétraitements tabulaires communs: `src/data/preprocess.py`.
+	- Features métier et ratios: `src/features/build_features.py`.
+	- Score de complétude: `src/features/completeness.py`.
+
+3. Entraînement modèles
+	- Pipeline historique code-first: `src/models/train_baseline.py`, `src/models/train_lgbm.py`.
+	- Pipeline principal réel notebook-first: `notebooks/05_model_baselines.ipynb`.
+
+4. Inférence et explication
+	- Runtime API actuel via `src/models/predict.py` (baseline historique).
+	- Analyse explicative avancée via `notebooks/06_calibration_explainability.ipynb`.
+
+5. Règles et agents
+	- Recommandation métier: `src/rules/recommendation.py`.
+	- Agents note/review/summary: `src/agents/`.
+
+6. Exposition
+	- API FastAPI: `src/api/`.
+	- UI Streamlit: `src/ui/`.
+
+## Flux A - Analytique réel (notebooks)
+
+1. Lire le ZIP Zindi à la racine du repo.
+2. Construire les tables enrichies/features (`data/processed/`).
+3. Sélectionner les variables et entraîner un modèle calibré.
+4. Sauvegarder les artefacts de décision dans `models/`.
+5. Contrôler calibration, seuil et stabilité par segment.
+
+Artefacts clés:
+
+- `models/logreg_raw.pkl`
+- `models/best_threshold.txt`
+- `models/raw_baselines_metrics.csv`
+- `models/model_coefficients.csv`
+
+## Flux B - Application démo (API/UI)
+
+1. Générer données synthétiques.
+2. Entraîner baseline + candidate via Makefile.
+3. Servir le scoring via FastAPI et Streamlit.
+4. Appliquer règles métier et génération de résumé.
+
+## Décision d'architecture actuelle
+
+L'écart entre Flux A (réel) et Flux B (runtime) est temporairement accepté pour préserver la continuité de la démo applicative tout en faisant progresser la crédibilité data science.
+
+## Prochaine convergence
+
+Objectif cible: brancher API/UI sur l'artefact calibré principal et son seuil optimisé, puis harmoniser tests et monitoring autour de ce flux unique.

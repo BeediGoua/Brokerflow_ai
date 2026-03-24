@@ -7,11 +7,9 @@ augment these functions with more robust error handling and data type
 parsing.
 """
 
-from pathlib import Path
-from typing import Optional
-
 import pandas as pd
 
+from .raw_competition import RawCompetitionBundle, build_current_loan_tables, load_raw_competition_zip
 from .validate_inputs import validate_applications_columns
 
 
@@ -39,6 +37,17 @@ def load_documents_csv(path: str) -> pd.DataFrame:
         Loaded DataFrame.
     """
     return pd.read_csv(path)
+
+
+def load_raw_competition_bundle(path: str) -> RawCompetitionBundle:
+    """Load the Zindi competition ZIP directly from disk."""
+    return load_raw_competition_zip(path)
+
+
+def load_enriched_raw_competition_tables(path: str) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Load the Zindi competition ZIP and return enriched train/test tables."""
+    bundle = load_raw_competition_bundle(path)
+    return build_current_loan_tables(bundle)
 
 
 def load_reviews_csv(path: str) -> pd.DataFrame:

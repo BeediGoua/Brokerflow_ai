@@ -1,21 +1,59 @@
 # Model Card
 
-This model card describes the two machine learning models used in BrokerFlow AI.
+Cette model card décrit l'état actuel des modèles disponibles dans BrokerFlow AI.
 
-## Baseline – Logistic Regression
+## 1) Modèle principal de l'analyse réelle
 
-- **Purpose:** Serve as a simple, interpretable baseline for default prediction.
-- **Data:** Trained on synthetic data with engineered features and a completeness score.
-- **Features:** Ratios (debt/income, requested/income), instalment proxy, bucketed years in job and account tenure, late payment rate, recent credit activity, income stability score and counts of prior loans and late payments.
-- **Metrics:** Achieves ROC‑AUC around 0.80 on synthetic test data.  Precision, recall and F1 are reported during training.
-- **Interpretability:** Coefficients indicate whether each feature increases or decreases the risk.  Contributions are computed by multiplying standardised features by the coefficients.
-- **Limitations:** Linear decision boundary cannot capture complex interactions.  Sensitive to feature scaling.
+### Identité
 
-## Candidate – LightGBM
+- Type: régression logistique calibrée (probabilités calibrées)
+- Artefact principal: `models/logreg_raw.pkl`
+- Seuil opérationnel recommandé: `models/best_threshold.txt`
 
-- **Purpose:** Provide a more powerful non‑linear model that captures interactions between features.
-- **Data:** Same synthetic dataset as the baseline.  Features are not scaled.
-- **Parameters:** 200 estimators, learning rate 0.05, default depth.
-- **Metrics:** Achieves higher AUC than the baseline on synthetic data (>0.85).  Precision, recall and F1 are reported during training.
-- **Interpretability:** SHAP values are used to explain predictions locally and globally.  See `src/explain/local_explanations.py`.
-- **Limitations:** Harder to interpret than the logistic model.  Overfitting can occur if trained on small real datasets.
+### Données d'entraînement
+
+- Source: tables brutes Zindi (ZIP compétition)
+- Tables dérivées: `data/processed/train_enriched.csv` et `data/processed/train_features.csv`
+- Cible: défaut observé dans les tables train performance
+
+### Sélection de variables
+
+Pipeline appliqué dans `notebooks/05_model_baselines.ipynb`:
+
+1. Filtre de valeurs manquantes.
+2. Filtre de variance quasi nulle.
+3. Réduction de redondance par corrélation.
+4. Screening information value/KS selon disponibilité.
+5. Sélection finale régularisée (L1) avec contraintes de lisibilité métier.
+
+Rapports sauvegardés:
+
+- `models/feature_selection_report.csv`
+- `models/selected_features.csv`
+- `models/model_coefficients.csv`
+
+### Évaluation
+
+- Métriques de base stockées dans `models/raw_baselines_metrics.csv`
+- Vérification calibration et comportement par segment dans `notebooks/06_calibration_explainability.ipynb`
+- Seuil optimisé par compromis précision/rappel (pas uniquement 0.50)
+
+### Interprétabilité
+
+- Interprétation globale via coefficients standardisés.
+- Analyse segmentée de calibration pour détecter dérives ou biais de calibration.
+
+### Limites
+
+1. Modèle linéaire: interactions non linéaires moins bien captées.
+2. Dépendance à la qualité des features dérivées du schéma brut.
+3. Performance sensible aux shifts de population (drift temporel).
+
+## 2) Modèles historiques conservés
+
+Ces modèles existent pour compatibilité runtime API/UI actuelle:
+
+- `models/baseline_logreg.pkl`
+- `models/candidate_lgbm.pkl`
+
+Ils restent utiles pour la démo applicative existante, mais ne représentent pas le flux analytique réel le plus avancé.
