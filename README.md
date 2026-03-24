@@ -1,124 +1,137 @@
 # BrokerFlow AI - Underwriting Copilot
 
-BrokerFlow AI est un projet de scoring crédit orienté portfolio, avec deux parcours complémentaires:
+BrokerFlow AI est un projet de scoring crédit orienté décision underwriting.
+Le but n'est pas seulement de prédire un risque, mais d'aider un analyste à choisir une action claire et justifiable.
 
-1. Un parcours notebook centré sur les vraies données Zindi (ingestion ZIP, feature engineering, sélection de variables, calibration, seuil optimal).
-2. Un parcours application API/UI historique pour la démonstration produit rapide (synthetic demo flow).
+## 1. Problem
 
-Le projet vise à aider un analyste crédit à structurer la décision, pas à remplacer la décision humaine.
+Problème concret:
 
-## Objectif métier
+1. Les décisions de crédit peuvent être incohérentes quand le risque est évalué uniquement à l'intuition.
+2. Les souscripteurs ont besoin d'une recommandation explicable, pas d'une simple probabilité.
 
-À partir de données tabulaires d'un dossier et d'un contexte métier:
+Utilisateur cible:
 
-1. Estimer un score de risque de défaut (0 à 1).
-2. Classer le risque (Low, Medium, High).
-3. Produire une explication concise des facteurs importants.
-4. Appliquer des règles métier pour recommander une action.
-5. Générer un résumé lisible pour l'underwriter.
+1. Analyste crédit / underwriter junior.
 
-## État actuel du projet
+## 2. Why it matters
 
-Le repository est aujourd'hui dans un état hybride assumé:
+Si le problème n'est pas traité:
 
-1. Données réelles Zindi intégrées au pipeline notebook.
-2. Artefacts modèles calibrés générés et sauvegardés dans `models/`.
-3. API/UI encore alignées sur le flux baseline historique (synthetic + baseline model path).
+1. Les défauts non détectés augmentent le coût du risque.
+2. Les bons dossiers rejetés réduisent la croissance.
+3. Les décisions peu traçables limitent la confiance métier.
 
-## Données
+La valeur métier recherchée est donc double: mieux détecter le risque et mieux justifier la décision.
 
-Deux modes coexistent.
+## 3. Solution
 
-### 1. Mode réel (recommandé pour l'analyse ML)
+Pipeline simple et lisible:
 
-Source principale:
+1. Ingestion des données brutes Zindi depuis ZIP.
+2. Feature engineering et sélection de variables.
+3. Entraînement d'un modèle logistique calibré.
+4. Optimisation d'un seuil opérationnel.
+5. Politique de décision V2: score + seuil + complétude + sévérité d'alertes.
 
-- `data-science-nigeria-challenge-1-loan-default-prediction20250307-26022-im3qg9.zip`
+Comparaison modèles (simple):
 
-Traitement via `src/data/raw_competition.py`:
+1. Benchmark baseline vs challengers avec trois options:
+	- `baseline_logreg`
+	- `lightgbm`
+	- `stacking_logreg_lgbm`
+2. Calibration homogène et comparaison business orientée détection du risque.
+3. Export du gagnant et des métriques dans `models/challenger_metrics.csv` et `models/challenger_winner.json`.
 
-1. Lecture directe du ZIP sans extraction manuelle.
-2. Validation des tables attendues.
-3. Fusion des tables de démographie et historique de prêts.
-4. Construction de tables enrichies train/test.
+## 4. Results
 
-Sorties dérivées actuellement présentes:
+Mesures issues de `models/raw_baselines_metrics.csv` (modèle `logreg_business_calibrated`):
 
-- `data/processed/train_enriched.csv`
-- `data/processed/test_enriched.csv`
-- `data/processed/history_features.csv`
-- `data/processed/train_features.csv`
-- `data/processed/test_features.csv`
+| Mesure | Valeur |
+|---|---:|
+| ROC AUC | 0.7277 |
+| Brier score | 0.1498 |
+| CV AUC mean ± std | 0.7012 ± 0.0203 |
+| Nombre de features | 21 |
+| Seuil optimal F1 | 0.2309 |
+| F1 à 0.50 | 0.2105 |
+| F1 au seuil optimal | 0.4833 |
+| Recall à 0.50 | 0.1263 |
+| Recall au seuil optimal | 0.5316 |
 
-### 2. Mode synthétique (démo API/UI)
+Lecture métier:
 
-Fichiers générés sous `data/synthetic/` via `src/data/generate_synthetic_cases.py`.
+1. Le modèle discrimine correctement le risque (AUC ~0.73).
+2. Le seuil optimisé améliore fortement la détection des dossiers risqués.
 
-Ce mode est utile pour démo produit rapide et tests de bout en bout sur des schémas maîtrisés.
+## 5. Decision
 
-## Modélisation
+Décision retenue:
 
-### Pipeline notebook réel
+1. Utiliser la régression logistique calibrée comme moteur principal.
+2. Utiliser le seuil `0.2309` (plutôt que `0.50`).
+3. Convertir le score en action via la politique V2.
 
-Le flux principal réel est documenté et exécuté dans:
+Pourquoi:
 
-1. `notebooks/04_feature_engineering.ipynb`
-2. `notebooks/05_model_baselines.ipynb`
-3. `notebooks/06_calibration_explainability.ipynb`
+1. Meilleur compromis explicabilité/performance pour l'underwriting.
+2. Gain important en rappel et F1 versus le seuil naïf.
+3. Décision auditée via `decision_reason_codes`, `decision_alert_severity`, `decision_completeness_bucket`.
 
-Ce flux produit notamment:
+## Trade-offs et contraintes
 
-- `models/logreg_raw.pkl`
-- `models/best_threshold.txt`
-- `models/feature_selection_report.csv`
-- `models/selected_features.csv`
-- `models/model_coefficients.csv`
-- `models/raw_baselines_metrics.csv`
+Trade-off principal (seuil):
 
-### Pipeline code historique
+1. Seuil `0.50`: meilleure accuracy brute, mais sous-détection forte des défauts.
+2. Seuil `0.2309`: accuracy plus basse, mais détection du risque nettement meilleure.
 
-Le Makefile entraîne encore les modèles baseline/candidate historiques:
+Contraintes opérationnelles actuelles:
 
-- `python -m src.models.train_baseline`
-- `python -m src.models.train_lgbm`
+1. Compatibilité: maintien temporaire de `/v1/score`.
+2. Gouvernance: règles V2 encore heuristiques (validation compliance incomplète).
+3. Maintenance: nécessité de recalibrer périodiquement le seuil selon drift.
 
-Artefacts liés:
+## Qui décide et comment
 
-- `models/baseline_logreg.pkl`
-- `models/candidate_lgbm.pkl`
+1. Le moteur produit une recommandation (`APPROVE`, `REVIEW`, `DECLINE`) avec traçabilité.
+2. L'underwriter reste le décideur final.
+3. Les cas ambigus ou alertés sont orientés vers revue manuelle.
 
-## API et interface
+## 6. Limitations
 
-L'API FastAPI expose maintenant deux routes de scoring:
+1. La route `/v1/score` est conservée pour compatibilité et doit être dépréciée.
+2. Les règles V2 restent heuristiques (pas de policy engine réglementaire complet).
+3. La taxonomie d'alertes est encore légère et doit être validée côté risk/compliance.
+4. Le projet est un démonstrateur technique, pas un système réglementaire production.
 
-1. `/v1/score`: route de compatibilité, désormais alignée sur le runtime calibré.
-2. `/v2/score`: route cible calibrée (même moteur, mêmes règles V2, enrichie pour usage produit).
+## 7. Architecture
 
-La route v2 utilise:
+Le runtime de scoring est unifié autour de l'artefact calibré:
 
-1. `src/models/raw_runtime_feature_adapter.py` pour mapper le payload API vers les features du modèle réel.
-2. `src/models/raw_runtime_loader.py` pour charger le runtime calibré.
-3. `src/api/routes/scoring_real.py` pour servir le scoring unifié côté modèle.
-4. `src/rules/business_rules.py` (V2) pour une décision métier score + seuil + complétude + sévérité d'alertes.
+1. Mapping features: `src/models/raw_runtime_feature_adapter.py`
+2. Chargement runtime: `src/models/raw_runtime_loader.py`
+3. API scoring: `/v1/score` (compat) et `/v2/score` (cible)
+4. Décision métier: `src/rules/business_rules.py` (V2)
+5. Alertes structurées: `src/rules/consistency_checks.py`, `POST /v1/review-detailed`
 
-La taxonomie d'alertes est maintenant structurée (code, sévérité, source, confidence) via:
+Flux principal recommandé pour présentation:
 
-1. `src/rules/consistency_checks.py`
-2. `src/agents/reviewer.py`
-3. `POST /v1/review-detailed`
+1. Notebooks réels: `04 -> 05 -> 06`
+2. API/Runtime: `POST /v2/score`
+3. Comparaison modèles: `notebooks/09_champion_challenger_comparison.ipynb`
 
-La réponse `/v2/score` inclut aussi des métadonnées d'audit de décision:
+Flux démo synthétique:
 
-1. `decision_reason_codes`
-2. `decision_alert_severity`
-3. `decision_completeness_bucket`
-4. `decision_threshold`
+1. Conservé pour démonstration UI rapide, non prioritaire pour l'histoire métier.
 
-Les réponses `/v1/score` et `/v2/score` incluent aussi `alerts_structured`.
+## Impact métier à suivre
 
-L'interface Streamlit est alignée sur le runtime calibré et la décision V2.
+KPI recommandés:
 
-La chaîne baseline historique reste disponible dans le code pour compatibilité, mais n'est plus le chemin recommandé en runtime.
+1. Taux de défauts détectés (proxy recall classe défaut).
+2. Taux de dossiers en revue manuelle (`REVIEW`).
+3. Taux de décisions corrigées après revue humaine.
+4. Délai moyen de décision par dossier (efficacité opérationnelle).
 
 ## Démarrage rapide
 
@@ -126,38 +139,32 @@ La chaîne baseline historique reste disponible dans le code pour compatibilité
 make setup
 ```
 
-### Démarrage mode démo API/UI
+### Démo API/UI
 
 ```bash
 python -m src.data.generate_synthetic_cases
 make train
+make challenge
 make run
 streamlit run src/ui/app.py
 ```
 
-### Démarrage mode réel notebook
+### Parcours réel notebook
 
-1. Vérifier que le ZIP Zindi est à la racine du projet.
-2. Exécuter les notebooks 04, 05 puis 06.
-3. Vérifier la création des artefacts dans `data/processed/` et `models/`.
-4. Générer le bundle runtime unifié pour l'API v2:
+1. Vérifier le ZIP Zindi à la racine.
+2. Exécuter les notebooks 04, 05, 06.
+3. Vérifier les artefacts dans `data/processed/` et `models/`.
+4. Construire le bundle runtime:
 
 ```bash
 python -m src.models.build_raw_runtime_bundle
 ```
 
-## Limitations connues
-
-1. La logique runtime est unifiée, mais la route `/v1/score` est maintenue pour compatibilité et doit être dépréciée à terme.
-2. Les règles métier V2 sont plus cohérentes mais restent heuristiques (pas de policy engine réglementaire complet).
-3. La taxonomie d'alertes est implémentée mais encore légère; elle doit être validée et enrichie avec une nomenclature métier/compliance.
-4. Les agents NLP sont majoritairement heuristiques (keywords), non LLM-native.
-5. Le projet reste un démonstrateur technique et non un système de décision réglementaire prêt production.
-
 ## Documentation associée
 
-- `docs/raw_dataset_integration.md`: intégration données Zindi.
-- `docs/data_dictionary.md`: dictionnaire des variables et proxies.
-- `docs/model_card.md`: état actuel des modèles et artefacts.
-- `docs/architecture.md`: architecture logique et flux.
-- `docs/demo_script.md`: script de démonstration réaliste.
+1. `evaluation.md`: protocole, métriques, biais et comparaisons.
+2. `docs/raw_dataset_integration.md`
+3. `docs/data_dictionary.md`
+4. `docs/model_card.md`
+5. `docs/architecture.md`
+6. `docs/demo_script.md`

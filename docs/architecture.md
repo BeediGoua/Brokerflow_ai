@@ -81,4 +81,10 @@ L'écart entre flux analytique et flux applicatif est réduit: API et UI utilise
 
 ## Prochaine convergence
 
-Objectif cible: brancher API/UI sur l'artefact calibré principal et son seuil optimisé, puis harmoniser tests et monitoring autour de ce flux unique.
+La convergence runtime principale est réalisée (API/UI alignées sur le runtime calibré).
+
+Prochain objectif:
+
+1. Déprécier proprement `/v1/score` avec plan de migration.
+2. Renforcer la gouvernance risk/compliance de la policy V2.
+3. Industrialiser le monitoring (drift, stabilité du seuil, qualité des alertes).

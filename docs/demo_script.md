@@ -43,6 +43,7 @@ Objectif: montrer le produit de scoring interactif.
 ```bash
 python -m src.data.generate_synthetic_cases
 make train
+make challenge
 make run
 streamlit run src/ui/app.py
 ```
@@ -54,6 +55,7 @@ Puis:
 3. Parcourir les pages Streamlit (single case, result, batch dashboard).
 4. Illustrer les alertes, la recommandation et le résumé agent.
 5. Montrer `POST /v1/review-detailed` pour la taxonomie d'alertes structurées.
+6. Montrer `models/challenger_metrics.csv` pour expliquer le benchmark champion-challenger.
 
 Points à montrer sur `/v2/score`:
 

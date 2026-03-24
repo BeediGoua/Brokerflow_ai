@@ -83,3 +83,23 @@ Ces modèles existent pour compatibilité runtime API/UI actuelle:
 Ils restent utiles pour la démo applicative existante, mais ne représentent pas le flux analytique réel le plus avancé.
 
 Note: le runtime de scoring applicatif est désormais aligné sur l'artefact calibré principal; ces artefacts historiques sont surtout conservés pour rétro-compatibilité et comparaison.
+
+## 3) Baseline vs challengers benchmark
+
+Un benchmark additionnel est disponible pour challenger le modèle de référence:
+
+1. `baseline_logreg` (référence)
+2. `lightgbm`
+3. `stacking_logreg_lgbm` (stacking)
+
+Script:
+
+- `python -m src.models.train_challenger`
+
+Artefacts de benchmark:
+
+- `models/challenger_metrics.csv`
+- `models/challenger_winner.json`
+- `models/baseline_logreg_calibrated.pkl`
+- `models/lightgbm_calibrated.pkl`
+- `models/stacking_logreg_lgbm_calibrated.pkl`
