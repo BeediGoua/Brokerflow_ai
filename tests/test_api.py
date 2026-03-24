@@ -28,3 +28,22 @@ def test_score_endpoint_returns_prediction():
     assert "risk_score" in data
     assert 0.0 <= data["risk_score"] <= 1.0
     assert data["risk_class"] in {"Low", "Medium", "High"}
+    assert "alerts_structured" in data
+    assert "decision_reason_codes" in data
+
+
+def test_review_detailed_endpoint_returns_structured_alerts():
+    apps, _, _ = generate_datasets(n_samples=3)
+    sample = apps.iloc[0].to_dict()
+    sample["employment_status"] = "unemployed"
+    sample["free_text_note"] = "stable job; previous loans paid"
+    response = client.post("/v1/review-detailed", json=sample)
+    assert response.status_code == 200
+    payload = response.json()
+    assert isinstance(payload, list)
+    if payload:
+        first = payload[0]
+        assert "code" in first
+        assert "severity" in first
+        assert "message" in first
+        assert "source" in first

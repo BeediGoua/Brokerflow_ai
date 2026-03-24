@@ -91,22 +91,34 @@ Artefacts liés:
 
 L'API FastAPI expose maintenant deux routes de scoring:
 
-1. `/v1/score`: chaîne baseline historique (compatibilité démo).
-2. `/v2/score`: chaîne calibrée alignée sur les artefacts du flux réel (`logreg_raw`).
+1. `/v1/score`: route de compatibilité, désormais alignée sur le runtime calibré.
+2. `/v2/score`: route cible calibrée (même moteur, mêmes règles V2, enrichie pour usage produit).
 
 La route v2 utilise:
 
 1. `src/models/raw_runtime_feature_adapter.py` pour mapper le payload API vers les features du modèle réel.
 2. `src/models/raw_runtime_loader.py` pour charger le runtime calibré.
 3. `src/api/routes/scoring_real.py` pour servir le scoring unifié côté modèle.
+4. `src/rules/business_rules.py` (V2) pour une décision métier score + seuil + complétude + sévérité d'alertes.
 
-L'interface Streamlit reste encore branchée sur la logique historique tant que la migration UI complète n'est pas finalisée.
+La taxonomie d'alertes est maintenant structurée (code, sévérité, source, confidence) via:
 
-Chaîne baseline historique (toujours disponible):
+1. `src/rules/consistency_checks.py`
+2. `src/agents/reviewer.py`
+3. `POST /v1/review-detailed`
 
-1. Score via `src/models/predict.py`.
-2. Règles via `src/rules/recommendation.py`.
-3. Agents texte (parse, review, summary) pour enrichir la décision.
+La réponse `/v2/score` inclut aussi des métadonnées d'audit de décision:
+
+1. `decision_reason_codes`
+2. `decision_alert_severity`
+3. `decision_completeness_bucket`
+4. `decision_threshold`
+
+Les réponses `/v1/score` et `/v2/score` incluent aussi `alerts_structured`.
+
+L'interface Streamlit est alignée sur le runtime calibré et la décision V2.
+
+La chaîne baseline historique reste disponible dans le code pour compatibilité, mais n'est plus le chemin recommandé en runtime.
 
 ## Démarrage rapide
 
@@ -136,10 +148,11 @@ python -m src.models.build_raw_runtime_bundle
 
 ## Limitations connues
 
-1. La convergence modèle est en place via `/v2/score`, mais `/v1/score` et certaines pages UI utilisent encore la chaîne historique.
-2. Les règles métier restent simplifiées pour un contexte portfolio.
-3. Les agents NLP sont majoritairement heuristiques (keywords), non LLM-native.
-4. Le projet reste un démonstrateur technique et non un système de décision réglementaire prêt production.
+1. La logique runtime est unifiée, mais la route `/v1/score` est maintenue pour compatibilité et doit être dépréciée à terme.
+2. Les règles métier V2 sont plus cohérentes mais restent heuristiques (pas de policy engine réglementaire complet).
+3. La taxonomie d'alertes est implémentée mais encore légère; elle doit être validée et enrichie avec une nomenclature métier/compliance.
+4. Les agents NLP sont majoritairement heuristiques (keywords), non LLM-native.
+5. Le projet reste un démonstrateur technique et non un système de décision réglementaire prêt production.
 
 ## Documentation associée
 

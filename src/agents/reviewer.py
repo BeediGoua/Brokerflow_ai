@@ -1,14 +1,12 @@
-"""
-Reviewer agent.
+"""Reviewer agent.
 
-This agent combines the parsed note with the structured application and
-document metadata to identify inconsistencies and missing items.  It
-delegates the core checks to the ``consistency_checks`` module.
+This agent combines parsed note signals with structured application/document
+data and exposes both legacy and structured alert outputs.
 """
 
-from typing import Dict, List
+from typing import Any, Dict, List
 
-from src.rules.consistency_checks import check_inconsistencies
+from src.rules.consistency_checks import check_inconsistencies, check_inconsistency_items
 
 
 def review_application(app: Dict, parsed_note: Dict, documents: List[Dict]) -> List[str]:
@@ -24,3 +22,8 @@ def review_application(app: Dict, parsed_note: Dict, documents: List[Dict]) -> L
     """
     alerts = check_inconsistencies(app, parsed_note, documents)
     return alerts
+
+
+def review_application_detailed(app: Dict, parsed_note: Dict, documents: List[Dict]) -> List[Dict[str, Any]]:
+    """Return structured alerts with code/severity for policy and audit usage."""
+    return check_inconsistency_items(app, parsed_note, documents)

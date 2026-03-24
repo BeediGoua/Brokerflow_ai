@@ -9,11 +9,9 @@ risk scores and counts per class.
 
 import streamlit as st
 import pandas as pd
+import numpy as np
 
-from src.data.preprocess import preprocess_applications
-from src.features.build_features import add_engineered_features
-from src.features.completeness import completeness_score
-from src.models.predict import predict_application, risk_class_from_score, _select_feature_columns
+from src.models.raw_runtime_loader import predict_application_real
 from src.config.logging import get_logger
 
 logger = get_logger(__name__)
@@ -39,12 +37,13 @@ def main() -> None:
         for _, row in df.iterrows():
             app_dict = row.to_dict()
             try:
-                res = predict_application(app_dict)
+                res = predict_application_real(app_dict)
                 results.append({
                     "application_id": app_dict.get("application_id", ""),
                     "risk_score": res["risk_score"],
                     "risk_class": res["risk_class"],
                     "completeness": res["completeness"],
+                    "threshold_used": res.get("threshold_used", 0.5),
                 })
             except Exception as exc:
                 logger.error(f"Failed to score application {app_dict.get('application_id')}: {exc}")
@@ -56,7 +55,12 @@ def main() -> None:
             counts = results_df["risk_class"].value_counts()
             st.bar_chart(counts)
             st.subheader("Risk Score Distribution")
-            st.histogram(results_df["risk_score"], bins=20)
+            hist_counts, bin_edges = np.histogram(results_df["risk_score"], bins=20, range=(0.0, 1.0))
+            hist_df = pd.DataFrame({
+                "bin_left": bin_edges[:-1],
+                "count": hist_counts,
+            }).set_index("bin_left")
+            st.bar_chart(hist_df)
             st.subheader("Detailed Results")
             st.dataframe(results_df)
 

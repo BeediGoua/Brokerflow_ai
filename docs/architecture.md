@@ -25,11 +25,14 @@ Le projet comporte deux couches complémentaires:
 	- Pipeline principal réel notebook-first: `notebooks/05_model_baselines.ipynb`.
 
 4. Inférence et explication
-	- Runtime API actuel via `src/models/predict.py` (baseline historique).
+	- Runtime API unifié calibré via `src/models/raw_runtime_loader.py`.
+	- Exposition scoring via `src/api/routes/scoring.py` (v1 compat) et `src/api/routes/scoring_real.py` (v2).
 	- Analyse explicative avancée via `notebooks/06_calibration_explainability.ipynb`.
 
 5. Règles et agents
-	- Recommandation métier: `src/rules/recommendation.py`.
+	- Recommandation métier legacy + V2: `src/rules/recommendation.py`.
+	- Politique V2 score/seuil/complétude/alertes: `src/rules/business_rules.py`.
+	- Taxonomie d'alertes structurées: `src/rules/consistency_checks.py` + `src/agents/reviewer.py`.
 	- Agents note/review/summary: `src/agents/`.
 
 6. Exposition
@@ -58,9 +61,23 @@ Artefacts clés:
 3. Servir le scoring via FastAPI et Streamlit.
 4. Appliquer règles métier et génération de résumé.
 
+## Flux C - API calibrée v2
+
+1. Charger les artefacts calibrés (`logreg_raw` + seuil).
+2. Adapter le payload API vers les features sélectionnées.
+3. Scorer avec probabilités calibrées.
+4. Appliquer la politique métier V2.
+5. Retourner décision + métadonnées d'audit (reason codes, sévérité, bucket, seuil).
+
+## Flux D - Review détaillée
+
+1. Parser la note et croiser avec les champs structurés/documents.
+2. Générer des alertes typées (code, sévérité, source, confidence).
+3. Exposer les alertes via `POST /v1/review-detailed`.
+
 ## Décision d'architecture actuelle
 
-L'écart entre Flux A (réel) et Flux B (runtime) est temporairement accepté pour préserver la continuité de la démo applicative tout en faisant progresser la crédibilité data science.
+L'écart entre flux analytique et flux applicatif est réduit: API et UI utilisent désormais le runtime calibré. La dette principale restante concerne la gouvernance métier/compliance de la policy.
 
 ## Prochaine convergence
 

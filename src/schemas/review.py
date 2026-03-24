@@ -23,3 +23,14 @@ class Review(BaseModel):
 
     class Config:
         extra = "ignore"
+
+
+class ReviewAlert(BaseModel):
+    code: str = Field(..., description="Stable alert code for decisioning/audit")
+    severity: str = Field(..., description="Alert severity bucket (low/medium/high)")
+    message: str = Field(..., description="Human-readable alert message")
+    source: str = Field(..., description="Detection source (documents/note_parser/cross_check)")
+    confidence: float = Field(..., description="Confidence score for the detected alert")
+
+    class Config:
+        extra = "ignore"

@@ -9,11 +9,11 @@ invokes the prediction code directly.
 
 import streamlit as st
 
-from src.models.predict import predict_application, risk_class_from_score
+from src.models.raw_runtime_loader import predict_application_real
 from src.agents.note_parser import parse_note
-from src.agents.reviewer import review_application
+from src.agents.reviewer import review_application, review_application_detailed
 from src.agents.summary_writer import write_summary
-from src.rules.recommendation import recommend
+from src.rules.recommendation import recommend_detailed
 
 
 def display_result(result):
@@ -64,13 +64,28 @@ def main() -> None:
             "free_text_note": free_text_note,
         }
         # Predict
-        result = predict_application(app_dict)
+        result = predict_application_real(app_dict)
         # Parse note
         parsed = parse_note(app_dict["free_text_note"])
         # No documents in this demo
         docs = []
         alerts = review_application(app_dict, parsed, docs)
-        rec = recommend(result["risk_class"], result["completeness"], alerts)
+        alert_items = review_application_detailed(app_dict, parsed, docs)
+        severity_rank = {"none": 0, "low": 1, "medium": 2, "high": 3}
+        derived_severity = "none"
+        for item in alert_items:
+            sev = str(item.get("severity", "low")).lower()
+            if sev in severity_rank and severity_rank[sev] > severity_rank[derived_severity]:
+                derived_severity = sev
+
+        decision = recommend_detailed(
+            risk_score=result["risk_score"],
+            threshold=result.get("threshold_used", 0.5),
+            completeness=result["completeness"],
+            alerts=alerts,
+            alert_severity=derived_severity,
+        )
+        rec = decision.action
         summary = write_summary(result["risk_class"], result["risk_score"], result["top_factors"], rec, alerts)
         # Display
         display_result(result)
@@ -82,6 +97,10 @@ def main() -> None:
             st.success("No alerts detected.")
         st.subheader("Recommendation")
         st.write(f"**{rec}**")
+        st.caption(
+            f"Severity={decision.alert_severity} | Bucket={decision.completeness_bucket} | "
+            f"Threshold={result.get('threshold_used', 0.5):.3f}"
+        )
         st.subheader("Summary")
         st.write(summary)
 

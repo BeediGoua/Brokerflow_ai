@@ -33,3 +33,8 @@ def test_score_v2_endpoint_returns_prediction(monkeypatch):
     assert "risk_score" in payload
     assert 0.0 <= payload["risk_score"] <= 1.0
     assert payload["risk_class"] in {"Low", "Medium", "High"}
+    assert payload["recommendation"] in {"ACCEPTABLE", "REVIEW", "REQUEST_DOCUMENTS", "ESCALATE"}
+    assert isinstance(payload.get("alerts_structured"), list)
+    assert isinstance(payload.get("decision_reason_codes"), list)
+    assert payload.get("decision_alert_severity") in {"none", "low", "medium", "high"}
+    assert payload.get("decision_completeness_bucket") in {"critical", "partial", "good"}

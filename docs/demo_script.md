@@ -50,20 +50,31 @@ streamlit run src/ui/app.py
 Puis:
 
 1. Ouvrir `http://127.0.0.1:8000/docs` et tester `/v1/score`.
-2. Parcourir les pages Streamlit (single case, result, batch dashboard).
-3. Illustrer les alertes, la recommandation et le résumé agent.
+2. Tester ensuite `/v2/score` pour montrer la version calibrée et ses métadonnées de décision.
+3. Parcourir les pages Streamlit (single case, result, batch dashboard).
+4. Illustrer les alertes, la recommandation et le résumé agent.
+5. Montrer `POST /v1/review-detailed` pour la taxonomie d'alertes structurées.
+
+Points à montrer sur `/v2/score`:
+
+1. `decision_reason_codes`
+2. `decision_alert_severity`
+3. `decision_completeness_bucket`
+4. `decision_threshold`
 
 ## 4. Message à donner explicitement
 
 Le projet est volontairement en mode hybride:
 
 1. Pipeline notebook réel avancé (données Zindi + calibration).
-2. Runtime API/UI encore adossé au baseline historique.
+2. API v1/v2 alignées sur le runtime calibré.
+3. UI alignée sur la même logique de décision V2.
 
 Ce choix permet de démontrer à la fois la rigueur analytique et la couche produit.
 
 ## 5. Limites et prochaines étapes
 
-1. Unifier API/UI avec l'artefact calibré principal (`models/logreg_raw.pkl`).
-2. Renforcer l'évaluation hors temps/segment pour monitorer le drift.
-3. Industrialiser la gouvernance modèle (versioning, monitoring, retrain).
+1. Déprécier progressivement `/v1/score` (compatibilité).
+2. Renforcer la taxonomie d'alertes avec validation métier/compliance.
+3. Renforcer l'évaluation hors temps/segment pour monitorer le drift.
+4. Industrialiser la gouvernance modèle (versioning, monitoring, retrain).

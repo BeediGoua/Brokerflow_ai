@@ -38,6 +38,29 @@ Rapports sauvegardés:
 - Vérification calibration et comportement par segment dans `notebooks/06_calibration_explainability.ipynb`
 - Seuil optimisé par compromis précision/rappel (pas uniquement 0.50)
 
+### Couche décision métier (API v2)
+
+La recommandation ne repose pas uniquement sur la classe de risque. La politique V2 combine:
+
+1. score calibré,
+2. seuil opérationnel,
+3. complétude du dossier,
+4. sévérité des alertes.
+
+La réponse API v2 expose des champs d'audit:
+
+- `decision_reason_codes`
+- `decision_alert_severity`
+- `decision_completeness_bucket`
+- `decision_threshold`
+
+La réponse de scoring expose aussi des alertes structurées (`alerts_structured`) avec:
+
+1. `code`
+2. `severity`
+3. `source`
+4. `confidence`
+
 ### Interprétabilité
 
 - Interprétation globale via coefficients standardisés.
@@ -48,6 +71,7 @@ Rapports sauvegardés:
 1. Modèle linéaire: interactions non linéaires moins bien captées.
 2. Dépendance à la qualité des features dérivées du schéma brut.
 3. Performance sensible aux shifts de population (drift temporel).
+4. Politique métier V2 encore heuristique (pas d'arbre de décision réglementaire validé métier/compliance).
 
 ## 2) Modèles historiques conservés
 
@@ -57,3 +81,5 @@ Ces modèles existent pour compatibilité runtime API/UI actuelle:
 - `models/candidate_lgbm.pkl`
 
 Ils restent utiles pour la démo applicative existante, mais ne représentent pas le flux analytique réel le plus avancé.
+
+Note: le runtime de scoring applicatif est désormais aligné sur l'artefact calibré principal; ces artefacts historiques sont surtout conservés pour rétro-compatibilité et comparaison.
