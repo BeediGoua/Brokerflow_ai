@@ -15,7 +15,7 @@ def test_score_v2_endpoint_returns_prediction(monkeypatch):
     sample.pop("target_risk_flag", None)
 
     monkeypatch.setattr(
-        "src.api.routes.scoring_real.predict_application_real",
+        "src.api.routes.scoring.predict_application_real",
         lambda app_dict: {
             "risk_score": 0.42,
             "risk_class": "Medium",
@@ -38,3 +38,39 @@ def test_score_v2_endpoint_returns_prediction(monkeypatch):
     assert isinstance(payload.get("decision_reason_codes"), list)
     assert payload.get("decision_alert_severity") in {"none", "low", "medium", "high"}
     assert payload.get("decision_completeness_bucket") in {"critical", "partial", "good"}
+
+
+def test_score_v2_uses_documents_payload_for_structured_alerts(monkeypatch):
+    apps, _, _ = generate_datasets(n_samples=5)
+    sample = apps.iloc[0].to_dict()
+    sample.pop("target_risk_flag", None)
+    sample["documents"] = [
+        {
+            "document_id": "doc-1",
+            "application_id": sample["application_id"],
+            "document_type": "income_proof",
+            "is_required": True,
+            "is_provided": False,
+        }
+    ]
+
+    monkeypatch.setattr(
+        "src.api.routes.scoring.predict_application_real",
+        lambda app_dict: {
+            "risk_score": 0.20,
+            "risk_class": "Low",
+            "top_factors": [(
+                "due_vs_loan_ratio",
+                0.2,
+            )],
+            "completeness": 0.95,
+            "missing_columns": [],
+            "threshold_used": 0.23,
+            "model_source": "unit-test",
+        },
+    )
+
+    response = client.post("/v2/score", json=sample)
+    assert response.status_code == 200
+    payload = response.json()
+    assert any(item.get("code") == "DOC_REQUIRED_MISSING" for item in payload.get("alerts_structured", []))

@@ -1,0 +1,48 @@
+{
+  "cases_file": "data/agent_eval_cases.json",
+  "cases_count": 50.0,
+  "llm_timeout_seconds": 1,
+  "llm_max_retries": 0,
+  "llm_transport_mode": "offline",
+  "deterministic": {
+    "cases_count": 50.0,
+    "json_validity_rate": 1.0,
+    "summary_coherence": 1.0,
+    "parser_precision": 0.8,
+    "parser_recall": 1.0,
+    "parser_f1": 0.888888888888889,
+    "alert_precision": 1.0,
+    "alert_recall": 1.0,
+    "alert_f1": 1.0,
+    "latency_p50_ms": 0.004899999112240039,
+    "latency_p95_ms": 0.08309999975608662,
+    "fallback_rate": 0.0
+  },
+  "llm_assisted": {
+    "cases_count": 50.0,
+    "json_validity_rate": 1.0,
+    "summary_coherence": 1.0,
+    "parser_precision": 0.8,
+    "parser_recall": 1.0,
+    "parser_f1": 0.888888888888889,
+    "alert_precision": 1.0,
+    "alert_recall": 1.0,
+    "alert_f1": 1.0,
+    "latency_p50_ms": 0.32559999999648426,
+    "latency_p95_ms": 0.6105999982537469,
+    "fallback_rate": 0.0
+  },
+  "delta": {
+    "json_validity_rate": 0.0,
+    "summary_coherence": 0.0,
+    "parser_precision": 0.0,
+    "parser_recall": 0.0,
+    "parser_f1": 0.0,
+    "alert_precision": 0.0,
+    "alert_recall": 0.0,
+    "alert_f1": 0.0,
+    "latency_p50_ms": 0.3207000008842442,
+    "latency_p95_ms": 0.5274999984976603,
+    "fallback_rate": 0.0
+  }
+}

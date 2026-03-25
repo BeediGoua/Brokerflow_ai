@@ -1,4 +1,4 @@
-.PHONY: setup generate train-demo train challenge train-all run tests release-cli release-upload release-download
+.PHONY: setup generate train-demo train challenge train-all run run-gradio tests fmt format-check lint release-cli release-upload release-download
 
 setup:
 	pip install -r requirements.txt
@@ -21,8 +21,21 @@ train-all: train-demo challenge
 run:
 	uvicorn src.api.main:app --reload
 
+run-gradio:
+	python -m src.ui.gradio_app
+
 tests:
 	pytest -q
+
+fmt:
+	ruff format .
+	ruff check . --fix
+
+format-check:
+	ruff format . --check
+
+lint:
+	ruff check .
 
 release-cli:
 	python -m src.models.model_release --print-cli

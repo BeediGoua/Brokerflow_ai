@@ -9,7 +9,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.config.settings import settings
-from src.api.routes import health, scoring, review, scoring_real
+from src.api.routes import health, scoring, review
 
 
 def create_app() -> FastAPI:
@@ -26,7 +26,7 @@ def create_app() -> FastAPI:
     app.include_router(health.router, prefix=prefix)
     app.include_router(scoring.router, prefix=prefix)
     app.include_router(review.router, prefix=prefix)
-    app.include_router(scoring_real.router, prefix="/v2")
+    app.include_router(scoring.router_v2, prefix="/v2")
     return app
 
 

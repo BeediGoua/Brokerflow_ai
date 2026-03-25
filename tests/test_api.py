@@ -47,3 +47,22 @@ def test_review_detailed_endpoint_returns_structured_alerts():
         assert "severity" in first
         assert "message" in first
         assert "source" in first
+
+
+def test_review_detailed_uses_documents_payload_for_alerts():
+    apps, _, _ = generate_datasets(n_samples=3)
+    sample = apps.iloc[0].to_dict()
+    sample["documents"] = [
+        {
+            "document_id": "doc-1",
+            "application_id": sample["application_id"],
+            "document_type": "income_proof",
+            "is_required": True,
+            "is_provided": False,
+        }
+    ]
+
+    response = client.post("/v1/review-detailed", json=sample)
+    assert response.status_code == 200
+    payload = response.json()
+    assert any(item.get("code") == "DOC_REQUIRED_MISSING" for item in payload)

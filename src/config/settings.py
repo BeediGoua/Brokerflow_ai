@@ -38,9 +38,10 @@ class Settings(BaseSettings):
     model_download_timeout_seconds: int = 45
 
     # Agent/LLM runtime settings (phase 2)
-    ollama_base_url: str = "http://localhost:11434"
+    ollama_base_url: str = "http://127.0.0.1:11434"
     ollama_model: str = "qwen2.5:3b-instruct"
     agent_llm_enabled: bool = False
+    agent_tools_enabled: bool = False
     agent_request_timeout_seconds: int = 12
     agent_max_retries: int = 1
     agent_temperature: float = 0.2

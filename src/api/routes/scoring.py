@@ -1,10 +1,8 @@
 """
-Scoring endpoint.
+Scoring endpoints — v1 and v2.
 
-Exposes a POST endpoint that accepts an application JSON payload and
-returns the risk score, class, top factors, completeness, alerts,
-recommendation and summary.  Documents are not currently accepted via
-API but can be integrated by expanding the request model.
+Both versions share identical business logic via the shared ``_score`` helper.
+``router`` is mounted at /v1, ``router_v2`` at /v2 (calibrated real-runtime).
 """
 
 from fastapi import APIRouter
@@ -18,20 +16,12 @@ from src.agents.summary_writer import write_summary
 from src.rules.recommendation import recommend_detailed
 
 
-router = APIRouter()
-
-
-@router.post("/score", response_model=PredictionOut, tags=["Scoring"])
-def score_application(app: Application) -> PredictionOut:
-    """Score an application and return prediction outputs."""
-    # Convert Pydantic model to dict for processing
+def _score(app: Application) -> PredictionOut:
+    """Shared scoring logic for v1 and v2 routes."""
     app_dict = app.dict()
-    # Perform risk prediction (runtime aligned with calibrated artifacts)
     pred = predict_application_real(app_dict)
-    # Parse free text note
     parsed = parse_note(app_dict.get("free_text_note", ""))
-    # For this demo we have no document metadata via API
-    documents = []
+    documents = app_dict.get("documents") or []
     alerts = review_application(app_dict, parsed, documents)
     alert_items = review_application_detailed(app_dict, parsed, documents)
     severity_rank = {"none": 0, "low": 1, "medium": 2, "high": 3}
@@ -41,7 +31,6 @@ def score_application(app: Application) -> PredictionOut:
         if sev in severity_rank and severity_rank[sev] > severity_rank[derived_severity]:
             derived_severity = sev
 
-    # Decide recommended action with V2 policy
     decision = recommend_detailed(
         risk_score=pred["risk_score"],
         threshold=pred.get("threshold_used", 0.5),
@@ -50,7 +39,6 @@ def score_application(app: Application) -> PredictionOut:
         alert_severity=derived_severity,
     )
     rec = decision.action
-    # Generate summary
     summary = write_summary(
         risk_class=pred["risk_class"],
         risk_score=pred["risk_score"],
@@ -73,3 +61,19 @@ def score_application(app: Application) -> PredictionOut:
         decision_completeness_bucket=decision.completeness_bucket,
         decision_threshold=float(pred.get("threshold_used", 0.5)),
     )
+
+
+router = APIRouter()
+router_v2 = APIRouter()
+
+
+@router.post("/score", response_model=PredictionOut, tags=["Scoring"])
+def score_application(app: Application) -> PredictionOut:
+    """Score an application and return prediction outputs."""
+    return _score(app)
+
+
+@router_v2.post("/score", response_model=PredictionOut, tags=["Scoring Real Runtime"])
+def score_application_real_runtime(app: Application) -> PredictionOut:
+    """Score an application using the calibrated raw-runtime model."""
+    return _score(app)

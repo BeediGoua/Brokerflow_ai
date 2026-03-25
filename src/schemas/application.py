@@ -7,7 +7,9 @@ Missing values will be handled by the preprocessing pipeline.
 """
 
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import List, Optional
+
+from src.schemas.document import Document
 
 
 class Application(BaseModel):
@@ -35,6 +37,10 @@ class Application(BaseModel):
     days_since_last_loan: Optional[int] = Field(None, description="Days since the last loan was taken")
     declared_purpose: Optional[str] = Field(None, description="Purpose declared by the applicant for the loan")
     free_text_note: Optional[str] = Field("", description="Unstructured note or email accompanying the application")
+    documents: Optional[List[Document]] = Field(
+        default_factory=list,
+        description="Optional supporting documents metadata for reviewer checks",
+    )
     # The target flag is optional for inference; it is present for training purposes
     target_risk_flag: Optional[int] = Field(None, description="1 if the applicant eventually defaulted, else 0")
 

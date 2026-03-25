@@ -1,0 +1,1380 @@
+{
+    "cases":  [
+                  {
+                      "case_id":  "eval_001",
+                      "application":  {
+                                          "application_id":  "APP-001",
+                                          "customer_id":  "CUST-001",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Stable profile with regular income.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+
+                                                ],
+                      "expected_recommendation":  "ACCEPTABLE",
+                      "notes":  "standard_clean_case"
+                  },
+                  {
+                      "case_id":  "eval_002",
+                      "application":  {
+                                          "application_id":  "APP-002",
+                                          "customer_id":  "CUST-002",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Client wants to finance studies.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+
+                                                ],
+                      "expected_recommendation":  "ACCEPTABLE",
+                      "notes":  "standard_clean_case"
+                  },
+                  {
+                      "case_id":  "eval_003",
+                      "application":  {
+                                          "application_id":  "APP-003",
+                                          "customer_id":  "CUST-003",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Employment is stable and dossier appears complete.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+
+                                                ],
+                      "expected_recommendation":  "ACCEPTABLE",
+                      "notes":  "standard_clean_case"
+                  },
+                  {
+                      "case_id":  "eval_004",
+                      "application":  {
+                                          "application_id":  "APP-004",
+                                          "customer_id":  "CUST-004",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "No specific risk signal in note.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+
+                                                ],
+                      "expected_recommendation":  "ACCEPTABLE",
+                      "notes":  "standard_clean_case"
+                  },
+                  {
+                      "case_id":  "eval_005",
+                      "application":  {
+                                          "application_id":  "APP-005",
+                                          "customer_id":  "CUST-005",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Income appears regular over recent months.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+
+                                                ],
+                      "expected_recommendation":  "ACCEPTABLE",
+                      "notes":  "standard_clean_case"
+                  },
+                  {
+                      "case_id":  "eval_006",
+                      "application":  {
+                                          "application_id":  "APP-006",
+                                          "customer_id":  "CUST-006",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Stable profile with regular income.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+
+                                                ],
+                      "expected_recommendation":  "ACCEPTABLE",
+                      "notes":  "standard_clean_case"
+                  },
+                  {
+                      "case_id":  "eval_007",
+                      "application":  {
+                                          "application_id":  "APP-007",
+                                          "customer_id":  "CUST-007",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Client wants to finance studies.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+
+                                                ],
+                      "expected_recommendation":  "ACCEPTABLE",
+                      "notes":  "standard_clean_case"
+                  },
+                  {
+                      "case_id":  "eval_008",
+                      "application":  {
+                                          "application_id":  "APP-008",
+                                          "customer_id":  "CUST-008",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Employment is stable and dossier appears complete.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+
+                                                ],
+                      "expected_recommendation":  "ACCEPTABLE",
+                      "notes":  "standard_clean_case"
+                  },
+                  {
+                      "case_id":  "eval_009",
+                      "application":  {
+                                          "application_id":  "APP-009",
+                                          "customer_id":  "CUST-009",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "No specific risk signal in note.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+
+                                                ],
+                      "expected_recommendation":  "ACCEPTABLE",
+                      "notes":  "standard_clean_case"
+                  },
+                  {
+                      "case_id":  "eval_010",
+                      "application":  {
+                                          "application_id":  "APP-010",
+                                          "customer_id":  "CUST-010",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Income appears regular over recent months.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+
+                                                ],
+                      "expected_recommendation":  "ACCEPTABLE",
+                      "notes":  "standard_clean_case"
+                  },
+                  {
+                      "case_id":  "eval_011",
+                      "application":  {
+                                          "application_id":  "APP-011",
+                                          "customer_id":  "CUST-011",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Stable profile with regular income.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+
+                                                ],
+                      "expected_recommendation":  "ACCEPTABLE",
+                      "notes":  "standard_clean_case"
+                  },
+                  {
+                      "case_id":  "eval_012",
+                      "application":  {
+                                          "application_id":  "APP-012",
+                                          "customer_id":  "CUST-012",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Client wants to finance studies.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+
+                                                ],
+                      "expected_recommendation":  "ACCEPTABLE",
+                      "notes":  "standard_clean_case"
+                  },
+                  {
+                      "case_id":  "eval_013",
+                      "application":  {
+                                          "application_id":  "APP-013",
+                                          "customer_id":  "CUST-013",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Employment is stable and dossier appears complete.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+
+                                                ],
+                      "expected_recommendation":  "ACCEPTABLE",
+                      "notes":  "standard_clean_case"
+                  },
+                  {
+                      "case_id":  "eval_014",
+                      "application":  {
+                                          "application_id":  "APP-014",
+                                          "customer_id":  "CUST-014",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "No specific risk signal in note.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+
+                                                ],
+                      "expected_recommendation":  "ACCEPTABLE",
+                      "notes":  "standard_clean_case"
+                  },
+                  {
+                      "case_id":  "eval_015",
+                      "application":  {
+                                          "application_id":  "APP-015",
+                                          "customer_id":  "CUST-015",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Income appears regular over recent months.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+
+                                                ],
+                      "expected_recommendation":  "ACCEPTABLE",
+                      "notes":  "standard_clean_case"
+                  },
+                  {
+                      "case_id":  "eval_016",
+                      "application":  {
+                                          "application_id":  "APP-016",
+                                          "customer_id":  "CUST-016",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Stable profile with regular income.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+
+                                                ],
+                      "expected_recommendation":  "ACCEPTABLE",
+                      "notes":  "standard_clean_case"
+                  },
+                  {
+                      "case_id":  "eval_017",
+                      "application":  {
+                                          "application_id":  "APP-017",
+                                          "customer_id":  "CUST-017",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Client wants to finance studies.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+
+                                                ],
+                      "expected_recommendation":  "ACCEPTABLE",
+                      "notes":  "standard_clean_case"
+                  },
+                  {
+                      "case_id":  "eval_018",
+                      "application":  {
+                                          "application_id":  "APP-018",
+                                          "customer_id":  "CUST-018",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Employment is stable and dossier appears complete.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+
+                                                ],
+                      "expected_recommendation":  "ACCEPTABLE",
+                      "notes":  "standard_clean_case"
+                  },
+                  {
+                      "case_id":  "eval_019",
+                      "application":  {
+                                          "application_id":  "APP-019",
+                                          "customer_id":  "CUST-019",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "No specific risk signal in note.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+
+                                                ],
+                      "expected_recommendation":  "ACCEPTABLE",
+                      "notes":  "standard_clean_case"
+                  },
+                  {
+                      "case_id":  "eval_020",
+                      "application":  {
+                                          "application_id":  "APP-020",
+                                          "customer_id":  "CUST-020",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Income appears regular over recent months.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+
+                                                ],
+                      "expected_recommendation":  "ACCEPTABLE",
+                      "notes":  "standard_clean_case"
+                  },
+                  {
+                      "case_id":  "eval_021",
+                      "application":  {
+                                          "application_id":  "APP-021",
+                                          "customer_id":  "CUST-021",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "unemployed",
+                                          "monthly_income":  1200,
+                                          "requested_amount":  14000,
+                                          "debt_to_income_ratio":  0.39,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Broker note says stable job despite current status.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+                                                    "INC_EMPLOYMENT_NOTE_CONTRADICTION",
+                                                    "INC_EMPLOYMENT_INCOME_MISMATCH",
+                                                    "INC_INCOME_LOAN_RATIO"
+                                                ],
+                      "expected_recommendation":  "ESCALATE",
+                      "notes":  "hard_employment_contradiction"
+                  },
+                  {
+                      "case_id":  "eval_022",
+                      "application":  {
+                                          "application_id":  "APP-022",
+                                          "customer_id":  "CUST-022",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "unemployed",
+                                          "monthly_income":  1200,
+                                          "requested_amount":  14000,
+                                          "debt_to_income_ratio":  0.39,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Broker note says stable job despite current status.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+                                                    "INC_EMPLOYMENT_NOTE_CONTRADICTION",
+                                                    "INC_EMPLOYMENT_INCOME_MISMATCH",
+                                                    "INC_INCOME_LOAN_RATIO"
+                                                ],
+                      "expected_recommendation":  "ESCALATE",
+                      "notes":  "hard_employment_contradiction"
+                  },
+                  {
+                      "case_id":  "eval_023",
+                      "application":  {
+                                          "application_id":  "APP-023",
+                                          "customer_id":  "CUST-023",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "unemployed",
+                                          "monthly_income":  1200,
+                                          "requested_amount":  14000,
+                                          "debt_to_income_ratio":  0.39,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Broker note says stable job despite current status.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+                                                    "INC_EMPLOYMENT_NOTE_CONTRADICTION",
+                                                    "INC_EMPLOYMENT_INCOME_MISMATCH",
+                                                    "INC_INCOME_LOAN_RATIO"
+                                                ],
+                      "expected_recommendation":  "ESCALATE",
+                      "notes":  "hard_employment_contradiction"
+                  },
+                  {
+                      "case_id":  "eval_024",
+                      "application":  {
+                                          "application_id":  "APP-024",
+                                          "customer_id":  "CUST-024",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "unemployed",
+                                          "monthly_income":  1200,
+                                          "requested_amount":  14000,
+                                          "debt_to_income_ratio":  0.39,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Broker note says stable job despite current status.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+                                                    "INC_EMPLOYMENT_NOTE_CONTRADICTION",
+                                                    "INC_EMPLOYMENT_INCOME_MISMATCH",
+                                                    "INC_INCOME_LOAN_RATIO"
+                                                ],
+                      "expected_recommendation":  "ESCALATE",
+                      "notes":  "hard_employment_contradiction"
+                  },
+                  {
+                      "case_id":  "eval_025",
+                      "application":  {
+                                          "application_id":  "APP-025",
+                                          "customer_id":  "CUST-025",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "unemployed",
+                                          "monthly_income":  1200,
+                                          "requested_amount":  14000,
+                                          "debt_to_income_ratio":  0.39,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Broker note says stable job despite current status.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+                                                    "INC_EMPLOYMENT_NOTE_CONTRADICTION",
+                                                    "INC_EMPLOYMENT_INCOME_MISMATCH",
+                                                    "INC_INCOME_LOAN_RATIO"
+                                                ],
+                      "expected_recommendation":  "ESCALATE",
+                      "notes":  "hard_employment_contradiction"
+                  },
+                  {
+                      "case_id":  "eval_026",
+                      "application":  {
+                                          "application_id":  "APP-026",
+                                          "customer_id":  "CUST-026",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "unemployed",
+                                          "monthly_income":  1200,
+                                          "requested_amount":  14000,
+                                          "debt_to_income_ratio":  0.39,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Broker note says stable job despite current status.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+                                                    "INC_EMPLOYMENT_NOTE_CONTRADICTION",
+                                                    "INC_EMPLOYMENT_INCOME_MISMATCH",
+                                                    "INC_INCOME_LOAN_RATIO"
+                                                ],
+                      "expected_recommendation":  "ESCALATE",
+                      "notes":  "hard_employment_contradiction"
+                  },
+                  {
+                      "case_id":  "eval_027",
+                      "application":  {
+                                          "application_id":  "APP-027",
+                                          "customer_id":  "CUST-027",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "unemployed",
+                                          "monthly_income":  1200,
+                                          "requested_amount":  14000,
+                                          "debt_to_income_ratio":  0.39,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Broker note says stable job despite current status.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+                                                    "INC_EMPLOYMENT_NOTE_CONTRADICTION",
+                                                    "INC_EMPLOYMENT_INCOME_MISMATCH",
+                                                    "INC_INCOME_LOAN_RATIO"
+                                                ],
+                      "expected_recommendation":  "ESCALATE",
+                      "notes":  "hard_employment_contradiction"
+                  },
+                  {
+                      "case_id":  "eval_028",
+                      "application":  {
+                                          "application_id":  "APP-028",
+                                          "customer_id":  "CUST-028",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "unemployed",
+                                          "monthly_income":  1200,
+                                          "requested_amount":  14000,
+                                          "debt_to_income_ratio":  0.39,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Broker note says stable job despite current status.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+                                                    "INC_EMPLOYMENT_NOTE_CONTRADICTION",
+                                                    "INC_EMPLOYMENT_INCOME_MISMATCH",
+                                                    "INC_INCOME_LOAN_RATIO"
+                                                ],
+                      "expected_recommendation":  "ESCALATE",
+                      "notes":  "hard_employment_contradiction"
+                  },
+                  {
+                      "case_id":  "eval_029",
+                      "application":  {
+                                          "application_id":  "APP-029",
+                                          "customer_id":  "CUST-029",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  1600,
+                                          "requested_amount":  23000,
+                                          "debt_to_income_ratio":  0.71,
+                                          "prior_late_payments":  2,
+                                          "has_prior_default":  1,
+                                          "free_text_note":  "Client has urgent need and missing documents.",
+                                          "documents":  [
+                                                            {
+                                                                "document_id":  "DOC-029-1",
+                                                                "application_id":  "APP-029",
+                                                                "document_type":  "income_proof",
+                                                                "is_required":  true,
+                                                                "is_provided":  false
+                                                            }
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+                                                    "urgent_need"
+                                                ],
+                      "expected_alerts_codes":  [
+                                                    "DOC_REQUIRED_MISSING",
+                                                    "NOTE_MENTIONS_MISSING_DOCUMENTS",
+                                                    "INC_INCOME_LOAN_RATIO",
+                                                    "RISK_HIGH_DEBT_BURDEN",
+                                                    "AMB_NOTE_URGENCY_FLAG"
+                                                ],
+                      "expected_recommendation":  "REQUEST_DOCUMENTS",
+                      "notes":  "hard_urgent_missing_docs"
+                  },
+                  {
+                      "case_id":  "eval_030",
+                      "application":  {
+                                          "application_id":  "APP-030",
+                                          "customer_id":  "CUST-030",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  1600,
+                                          "requested_amount":  23000,
+                                          "debt_to_income_ratio":  0.71,
+                                          "prior_late_payments":  2,
+                                          "has_prior_default":  1,
+                                          "free_text_note":  "Besoin urgent, dossier incomplet.",
+                                          "documents":  [
+                                                            {
+                                                                "document_id":  "DOC-030-1",
+                                                                "application_id":  "APP-030",
+                                                                "document_type":  "income_proof",
+                                                                "is_required":  true,
+                                                                "is_provided":  false
+                                                            }
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+                                                    "urgent_need"
+                                                ],
+                      "expected_alerts_codes":  [
+                                                    "DOC_REQUIRED_MISSING",
+                                                    "NOTE_MENTIONS_MISSING_DOCUMENTS",
+                                                    "INC_INCOME_LOAN_RATIO",
+                                                    "RISK_HIGH_DEBT_BURDEN",
+                                                    "AMB_NOTE_URGENCY_FLAG"
+                                                ],
+                      "expected_recommendation":  "REQUEST_DOCUMENTS",
+                      "notes":  "hard_urgent_missing_docs"
+                  },
+                  {
+                      "case_id":  "eval_031",
+                      "application":  {
+                                          "application_id":  "APP-031",
+                                          "customer_id":  "CUST-031",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  1600,
+                                          "requested_amount":  23000,
+                                          "debt_to_income_ratio":  0.71,
+                                          "prior_late_payments":  2,
+                                          "has_prior_default":  1,
+                                          "free_text_note":  "Needs fast approval with pieces manquantes.",
+                                          "documents":  [
+                                                            {
+                                                                "document_id":  "DOC-031-1",
+                                                                "application_id":  "APP-031",
+                                                                "document_type":  "income_proof",
+                                                                "is_required":  true,
+                                                                "is_provided":  false
+                                                            }
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+                                                    "urgent_need"
+                                                ],
+                      "expected_alerts_codes":  [
+                                                    "DOC_REQUIRED_MISSING",
+                                                    "NOTE_MENTIONS_MISSING_DOCUMENTS",
+                                                    "INC_INCOME_LOAN_RATIO",
+                                                    "RISK_HIGH_DEBT_BURDEN",
+                                                    "AMB_NOTE_URGENCY_FLAG"
+                                                ],
+                      "expected_recommendation":  "REQUEST_DOCUMENTS",
+                      "notes":  "hard_urgent_missing_docs"
+                  },
+                  {
+                      "case_id":  "eval_032",
+                      "application":  {
+                                          "application_id":  "APP-032",
+                                          "customer_id":  "CUST-032",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  1600,
+                                          "requested_amount":  23000,
+                                          "debt_to_income_ratio":  0.71,
+                                          "prior_late_payments":  2,
+                                          "has_prior_default":  1,
+                                          "free_text_note":  "Situation tendue and missing documents for review.",
+                                          "documents":  [
+                                                            {
+                                                                "document_id":  "DOC-032-1",
+                                                                "application_id":  "APP-032",
+                                                                "document_type":  "income_proof",
+                                                                "is_required":  true,
+                                                                "is_provided":  false
+                                                            }
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+                                                    "urgent_need"
+                                                ],
+                      "expected_alerts_codes":  [
+                                                    "DOC_REQUIRED_MISSING",
+                                                    "NOTE_MENTIONS_MISSING_DOCUMENTS",
+                                                    "INC_INCOME_LOAN_RATIO",
+                                                    "RISK_HIGH_DEBT_BURDEN",
+                                                    "AMB_NOTE_URGENCY_FLAG"
+                                                ],
+                      "expected_recommendation":  "REQUEST_DOCUMENTS",
+                      "notes":  "hard_urgent_missing_docs"
+                  },
+                  {
+                      "case_id":  "eval_033",
+                      "application":  {
+                                          "application_id":  "APP-033",
+                                          "customer_id":  "CUST-033",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  1600,
+                                          "requested_amount":  23000,
+                                          "debt_to_income_ratio":  0.71,
+                                          "prior_late_payments":  2,
+                                          "has_prior_default":  1,
+                                          "free_text_note":  "Cash-flow serre, urgent need, documents incomplets.",
+                                          "documents":  [
+                                                            {
+                                                                "document_id":  "DOC-033-1",
+                                                                "application_id":  "APP-033",
+                                                                "document_type":  "income_proof",
+                                                                "is_required":  true,
+                                                                "is_provided":  false
+                                                            }
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+                                                    "urgent_need"
+                                                ],
+                      "expected_alerts_codes":  [
+                                                    "DOC_REQUIRED_MISSING",
+                                                    "NOTE_MENTIONS_MISSING_DOCUMENTS",
+                                                    "INC_INCOME_LOAN_RATIO",
+                                                    "RISK_HIGH_DEBT_BURDEN",
+                                                    "AMB_NOTE_URGENCY_FLAG"
+                                                ],
+                      "expected_recommendation":  "REQUEST_DOCUMENTS",
+                      "notes":  "hard_urgent_missing_docs"
+                  },
+                  {
+                      "case_id":  "eval_034",
+                      "application":  {
+                                          "application_id":  "APP-034",
+                                          "customer_id":  "CUST-034",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  1600,
+                                          "requested_amount":  23000,
+                                          "debt_to_income_ratio":  0.71,
+                                          "prior_late_payments":  2,
+                                          "has_prior_default":  1,
+                                          "free_text_note":  "Fast approval requested, dossier incomplet and risk signs.",
+                                          "documents":  [
+                                                            {
+                                                                "document_id":  "DOC-034-1",
+                                                                "application_id":  "APP-034",
+                                                                "document_type":  "income_proof",
+                                                                "is_required":  true,
+                                                                "is_provided":  false
+                                                            }
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+                                                    "urgent_need"
+                                                ],
+                      "expected_alerts_codes":  [
+                                                    "DOC_REQUIRED_MISSING",
+                                                    "NOTE_MENTIONS_MISSING_DOCUMENTS",
+                                                    "INC_INCOME_LOAN_RATIO",
+                                                    "RISK_HIGH_DEBT_BURDEN",
+                                                    "AMB_NOTE_URGENCY_FLAG"
+                                                ],
+                      "expected_recommendation":  "REQUEST_DOCUMENTS",
+                      "notes":  "hard_urgent_missing_docs"
+                  },
+                  {
+                      "case_id":  "eval_035",
+                      "application":  {
+                                          "application_id":  "APP-035",
+                                          "customer_id":  "CUST-035",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  4200,
+                                          "requested_amount":  12000,
+                                          "debt_to_income_ratio":  0.28,
+                                          "prior_late_payments":  3,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Previous loans paid with no issues.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+                                                    "no_late_payments"
+                                                ],
+                      "expected_alerts_codes":  [
+                                                    "INC_PAYMENT_HISTORY_CONTRADICTION"
+                                                ],
+                      "expected_recommendation":  "REVIEW",
+                      "notes":  "hard_negation_contradiction"
+                  },
+                  {
+                      "case_id":  "eval_036",
+                      "application":  {
+                                          "application_id":  "APP-036",
+                                          "customer_id":  "CUST-036",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  4200,
+                                          "requested_amount":  12000,
+                                          "debt_to_income_ratio":  0.28,
+                                          "prior_late_payments":  3,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "No late payments reported by client.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+                                                    "no_late_payments"
+                                                ],
+                      "expected_alerts_codes":  [
+                                                    "INC_PAYMENT_HISTORY_CONTRADICTION"
+                                                ],
+                      "expected_recommendation":  "REVIEW",
+                      "notes":  "hard_negation_contradiction"
+                  },
+                  {
+                      "case_id":  "eval_037",
+                      "application":  {
+                                          "application_id":  "APP-037",
+                                          "customer_id":  "CUST-037",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  4200,
+                                          "requested_amount":  12000,
+                                          "debt_to_income_ratio":  0.28,
+                                          "prior_late_payments":  3,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Aucun retard de paiement selon la note.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+                                                    "no_late_payments"
+                                                ],
+                      "expected_alerts_codes":  [
+                                                    "INC_PAYMENT_HISTORY_CONTRADICTION"
+                                                ],
+                      "expected_recommendation":  "REVIEW",
+                      "notes":  "hard_negation_contradiction"
+                  },
+                  {
+                      "case_id":  "eval_038",
+                      "application":  {
+                                          "application_id":  "APP-038",
+                                          "customer_id":  "CUST-038",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  4200,
+                                          "requested_amount":  12000,
+                                          "debt_to_income_ratio":  0.28,
+                                          "prior_late_payments":  3,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Jamais de retard mentionne dans l\u0027historique.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+                                                    "no_late_payments"
+                                                ],
+                      "expected_alerts_codes":  [
+                                                    "INC_PAYMENT_HISTORY_CONTRADICTION"
+                                                ],
+                      "expected_recommendation":  "REVIEW",
+                      "notes":  "hard_negation_contradiction"
+                  },
+                  {
+                      "case_id":  "eval_039",
+                      "application":  {
+                                          "application_id":  "APP-039",
+                                          "customer_id":  "CUST-039",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  4200,
+                                          "requested_amount":  12000,
+                                          "debt_to_income_ratio":  0.28,
+                                          "prior_late_payments":  3,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Client says no late payments in prior loans.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+                                                    "no_late_payments"
+                                                ],
+                      "expected_alerts_codes":  [
+                                                    "INC_PAYMENT_HISTORY_CONTRADICTION"
+                                                ],
+                      "expected_recommendation":  "REVIEW",
+                      "notes":  "hard_negation_contradiction"
+                  },
+                  {
+                      "case_id":  "eval_040",
+                      "application":  {
+                                          "application_id":  "APP-040",
+                                          "customer_id":  "CUST-040",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  4200,
+                                          "requested_amount":  12000,
+                                          "debt_to_income_ratio":  0.28,
+                                          "prior_late_payments":  3,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Historique propre: aucun retard.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+                                                    "no_late_payments"
+                                                ],
+                      "expected_alerts_codes":  [
+                                                    "INC_PAYMENT_HISTORY_CONTRADICTION"
+                                                ],
+                      "expected_recommendation":  "REVIEW",
+                      "notes":  "hard_negation_contradiction"
+                  },
+                  {
+                      "case_id":  "eval_041",
+                      "application":  {
+                                          "application_id":  "APP-041",
+                                          "customer_id":  "CUST-041",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Perhaps there was an incident, a verifier.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+                                                    "AMB_NOTE_CONTEXT_UNCLEAR"
+                                                ],
+                      "expected_recommendation":  "REVIEW",
+                      "notes":  "adversarial_ambiguity_language"
+                  },
+                  {
+                      "case_id":  "eval_042",
+                      "application":  {
+                                          "application_id":  "APP-042",
+                                          "customer_id":  "CUST-042",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Possible issue in repayment history, maybe temporary.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+                                                    "AMB_NOTE_CONTEXT_UNCLEAR"
+                                                ],
+                      "expected_recommendation":  "REVIEW",
+                      "notes":  "adversarial_ambiguity_language"
+                  },
+                  {
+                      "case_id":  "eval_043",
+                      "application":  {
+                                          "application_id":  "APP-043",
+                                          "customer_id":  "CUST-043",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Not impossible that payments were delayed.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+                                                    "AMB_NOTE_CONTEXT_UNCLEAR"
+                                                ],
+                      "expected_recommendation":  "REVIEW",
+                      "notes":  "adversarial_ambiguity_language"
+                  },
+                  {
+                      "case_id":  "eval_044",
+                      "application":  {
+                                          "application_id":  "APP-044",
+                                          "customer_id":  "CUST-044",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Peut-etre un incident, contexte incertain.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+                                                    "AMB_NOTE_CONTEXT_UNCLEAR"
+                                                ],
+                      "expected_recommendation":  "REVIEW",
+                      "notes":  "adversarial_ambiguity_language"
+                  },
+                  {
+                      "case_id":  "eval_045",
+                      "application":  {
+                                          "application_id":  "APP-045",
+                                          "customer_id":  "CUST-045",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "A verifier: situation possible de tension.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+                                                    "AMB_NOTE_CONTEXT_UNCLEAR"
+                                                ],
+                      "expected_recommendation":  "REVIEW",
+                      "notes":  "adversarial_ambiguity_language"
+                  },
+                  {
+                      "case_id":  "eval_046",
+                      "application":  {
+                                          "application_id":  "APP-046",
+                                          "customer_id":  "CUST-046",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Maybe profile is fine, perhaps not fully clear.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+                                                    "AMB_NOTE_CONTEXT_UNCLEAR"
+                                                ],
+                      "expected_recommendation":  "REVIEW",
+                      "notes":  "adversarial_ambiguity_language"
+                  },
+                  {
+                      "case_id":  "eval_047",
+                      "application":  {
+                                          "application_id":  "APP-047",
+                                          "customer_id":  "CUST-047",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Client needs to move quickly for studies but no risk element is stated.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+
+                                                ],
+                      "expected_recommendation":  "ACCEPTABLE",
+                      "notes":  "adversarial_false_positive_trap"
+                  },
+                  {
+                      "case_id":  "eval_048",
+                      "application":  {
+                                          "application_id":  "APP-048",
+                                          "customer_id":  "CUST-048",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Fast learner and quick onboarding in new job, no credit issue mentioned.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+
+                                                ],
+                      "expected_recommendation":  "ACCEPTABLE",
+                      "notes":  "adversarial_false_positive_trap"
+                  },
+                  {
+                      "case_id":  "eval_049",
+                      "application":  {
+                                          "application_id":  "APP-049",
+                                          "customer_id":  "CUST-049",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Travel planned soon; request unrelated to repayment stress.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+
+                                                ],
+                      "expected_recommendation":  "ACCEPTABLE",
+                      "notes":  "adversarial_false_positive_trap"
+                  },
+                  {
+                      "case_id":  "eval_050",
+                      "application":  {
+                                          "application_id":  "APP-050",
+                                          "customer_id":  "CUST-050",
+                                          "snapshot_date":  "2025-01-10",
+                                          "employment_status":  "employed",
+                                          "monthly_income":  3800,
+                                          "requested_amount":  9000,
+                                          "debt_to_income_ratio":  0.24,
+                                          "prior_late_payments":  0,
+                                          "has_prior_default":  0,
+                                          "free_text_note":  "Creative project needs quick setup, dossier otherwise clean.",
+                                          "documents":  [
+
+                                                        ]
+                                      },
+                      "expected_risk_signals":  [
+
+                                                ],
+                      "expected_alerts_codes":  [
+
+                                                ],
+                      "expected_recommendation":  "ACCEPTABLE",
+                      "notes":  "adversarial_false_positive_trap"
+                  }
+              ]
+}

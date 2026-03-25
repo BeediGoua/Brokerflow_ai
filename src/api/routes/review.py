@@ -22,7 +22,7 @@ def review_endpoint(app: Application) -> List[str]:
     """Return a list of alerts for the given application."""
     app_dict = app.dict()
     parsed = parse_note(app_dict.get("free_text_note", ""))
-    documents = []
+    documents = app_dict.get("documents") or []
     alerts = review_application(app_dict, parsed, documents)
     return alerts
 
@@ -32,6 +32,6 @@ def review_detailed_endpoint(app: Application) -> List[ReviewAlert]:
     """Return structured alerts with severity/code metadata."""
     app_dict = app.dict()
     parsed = parse_note(app_dict.get("free_text_note", ""))
-    documents = []
+    documents = app_dict.get("documents") or []
     alert_items = review_application_detailed(app_dict, parsed, documents)
     return [ReviewAlert(**item) for item in alert_items]

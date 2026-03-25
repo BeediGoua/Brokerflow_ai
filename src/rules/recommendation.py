@@ -7,12 +7,7 @@ business rules to produce a final recommendation string.
 
 from typing import List
 
-from .business_rules import DecisionResult, decide_action, decide_action_v2
-
-
-def recommend(risk_class: str, completeness: float, alerts: List[str]) -> str:
-    """Return the recommended action for an application."""
-    return decide_action(risk_class, completeness, alerts)
+from .business_rules import DecisionResult, decide_action_v2
 
 
 def recommend_detailed(
