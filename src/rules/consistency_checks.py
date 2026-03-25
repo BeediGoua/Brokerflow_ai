@@ -59,7 +59,7 @@ def check_inconsistency_items(app: Dict, parsed_note: Dict, documents: List[Dict
         )
 
     # Example 4: payment-history contradiction.
-    if app.get("prior_late_payments", 0) > 0 and parsed_note.get("mentions_no_late_payments"):
+    if (app.get("prior_late_payments") or 0) > 0 and parsed_note.get("mentions_no_late_payments"):
         alerts.append(
             _make_alert(
                 code="INC_PAYMENT_HISTORY_CONTRADICTION",

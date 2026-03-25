@@ -1,208 +1,179 @@
-# BrokerFlow AI - Underwriting Copilot
+# BrokerFlow AI
 
-BrokerFlow AI est un projet de scoring crédit orienté décision underwriting.
-Le but n'est pas seulement de prédire un risque, mais d'aider un analyste à choisir une action claire et justifiable.
+BrokerFlow AI est un copilote underwriting.
 
-## 1. Problem
+Le projet ne cherche pas a faire une simple prediction de risque. Il cherche a aider un broker a prendre une decision claire, justifiee et tracable, avec une architecture sobre: modele tabulaire pour la probabilite, policy deterministe pour la decision, agents legers pour le contexte et l'explication.
 
-Problème concret:
+## Le probleme que nous resolvons
 
-1. Les décisions de crédit peuvent être incohérentes quand le risque est évalué uniquement à l'intuition.
-2. Les souscripteurs ont besoin d'une recommandation explicable, pas d'une simple probabilité.
+Dans un flux credit reel, deux erreurs coutent cher:
+1. accepter un dossier qui va faire defaut,
+2. refuser un dossier sain faute de lecture structuree.
 
-Utilisateur cible:
+Dans beaucoup de workflows, la decision est soit trop intuitive, soit trop opaque. Un score seul ne suffit pas. Un broker a besoin de comprendre pourquoi le dossier est considere risqué, quels signaux sont contradictoires, et quelle action est recommandee.
 
-1. Analyste crédit / underwriter junior.
+## Notre approche en une phrase
 
-## 2. Why it matters
+Nous transformons un score de risque en decision metier explicable, avec des garde-fous qui rendent le systeme robuste meme sans LLM.
 
-Si le problème n'est pas traité:
+## Schema global
 
-1. Les défauts non détectés augmentent le coût du risque.
-2. Les bons dossiers rejetés réduisent la croissance.
-3. Les décisions peu traçables limitent la confiance métier.
-
-La valeur métier recherchée est donc double: mieux détecter le risque et mieux justifier la décision.
-
-## 3. Solution
-
-Pipeline simple et lisible:
-
-1. Ingestion des données brutes Zindi depuis ZIP.
-2. Feature engineering et sélection de variables.
-3. Entraînement d'un modèle logistique calibré.
-4. Optimisation d'un seuil opérationnel.
-5. Politique de décision V2: score + seuil + complétude + sévérité d'alertes.
-
-**Vue d'ensemble pipeline:**
-
-```
-Données brutes (CSV) → Feature Engineering → Modèle logistique
-                                                     ↓
-                                            Score risque (0-1)
-                                                     ↓
-                                        Seuil optimal + Règles V2
-                                                     ↓
-                                   Recommandation (APPROVE/REVIEW/DECLINE)
+```mermaid
+flowchart LR
+    A[Donnees dossier] --> B[Modele tabulaire calibre]
+    B --> C[Score de risque 0-1]
+    A --> D[Agents legers
+note parser / reviewer / summary]
+    C --> E[Policy deterministe]
+    D --> E
+    E --> F[Decision
+ACCEPTABLE / REVIEW / REQUEST_DOCUMENTS / ESCALATE]
+    E --> G[Reason codes + severite + completude]
 ```
 
-Comparaison modèles (simple):
+## Pourquoi cette architecture 
 
-1. Benchmark baseline vs challengers avec trois options:
-	- `baseline_logreg`
-	- `lightgbm`
-	- `stacking_logreg_lgbm`
-2. Calibration homogène et comparaison business orientée détection du risque.
-3. Export du gagnant et des métriques dans `models/challenger_metrics.csv` et `models/challenger_winner.json`.
+Le coeur du design est la separation stricte des responsabilites:
 
-## 4. Results
+1. Le modele ML estime une probabilite de defaut.
+2. La policy transforme cette probabilite en decision metier.
+3. Les agents ajoutent du contexte (texte, coherence, resume), sans prendre le controle de la decision.
 
-Mesures issues de `models/raw_baselines_metrics.csv` (modèle `logreg_business_calibrated`):
+Resultat: systeme explicable, auditable, maintenable, et defendable en entretien.
 
-| Mesure | Valeur |
-|---|---:|
-| ROC AUC | 0.7277 |
-| Brier score | 0.1498 |
-| CV AUC mean ± std | 0.7012 ± 0.0203 |
-| Nombre de features | 21 |
-| Seuil optimal F1 | 0.2309 |
-| F1 à 0.50 | 0.2105 |
-| F1 au seuil optimal | 0.4833 |
-| Recall à 0.50 | 0.1263 |
-| Recall au seuil optimal | 0.5316 |
+## Ce que les agents font exactement
 
-Lecture métier:
+Nous gardons volontairement 3 agents seulement pour eviter le sur-engineering.
 
-1. Le modèle discrimine correctement le risque (AUC ~0.73).
-2. Le seuil optimisé améliore fortement la détection des dossiers risqués.
+1. Note parser
+Il convertit la note libre en signaux structures.
 
-## 5. Decision
+2. Reviewer
+Il verifie la coherence entre donnees structurees, note et documents, et produit des alertes structurees.
 
-Décision retenue:
+3. Summary writer
+Il reformule la sortie finale en langage metier lisible pour le broker.
 
-1. Utiliser la régression logistique calibrée comme moteur principal.
-2. Utiliser le seuil `0.2309` (plutôt que `0.50`).
-3. Convertir le score en action via la politique V2.
+Règle non negociable: les agents n'ont jamais l'autorite finale sur la decision credit.
 
-Pourquoi:
+## Hierarchie de verite en cas de conflit
 
-1. Meilleur compromis explicabilité/performance pour l'underwriting.
-2. Gain important en rappel et F1 versus le seuil naïf.
-3. Décision auditée via `decision_reason_codes`, `decision_alert_severity`, `decision_completeness_bucket`.
-
-**Flux décisionnel V2:**
-
-```
-Score calibré
-    ↓
-Score < 0.2309?
-    ├─ Oui → APPROVE (risque faible)
-    └─ Non (score ≥ 0.2309)
-        ↓
-        Alertes structurées?
-        ├─ Oui → REVIEW (risque modéré + signaux)
-        └─ Non → DECLINE (risque élevé)
-        
-Chaque décision inclut:
-- reason_codes (motifs explicites)
-- alert_severity (criticité des alertes)
-- completeness_bucket (qualité des données)
+```mermaid
+flowchart TD
+    A[Donnees structurees validees] --> E[Decision finale]
+    B[Regles metier deterministes] --> E
+    C[Etat documentaire] --> E
+    D[Signaux texte LLM] --> E
+    F[Resume narratif] --> E
 ```
 
-## Trade-offs et contraintes
+Lecture:
+1. Donnees structurees et regles metier priment.
+2. Le texte enrichit, mais ne renverse pas les faits.
+3. Le resume explique, mais ne decide jamais.
 
-Trade-off principal (seuil):
+## Parcours de decision
 
-1. Seuil `0.50`: meilleure accuracy brute, mais sous-détection forte des défauts.
-2. Seuil `0.2309`: accuracy plus basse, mais détection du risque nettement meilleure.
+```mermaid
+sequenceDiagram
+    participant Broker
+    participant API
+    participant Model
+    participant Agents
+    participant Policy
 
-Contraintes opérationnelles actuelles:
-
-1. Compatibilité: maintien temporaire de `/v1/score`.
-2. Gouvernance: règles V2 encore heuristiques (validation compliance incomplète).
-3. Maintenance: nécessité de recalibrer périodiquement le seuil selon drift.
-
-## Qui décide et comment
-
-1. Le moteur produit une recommandation (`APPROVE`, `REVIEW`, `DECLINE`) avec traçabilité.
-2. L'underwriter reste le décideur final.
-3. Les cas ambigus ou alertés sont orientés vers revue manuelle.
-
-## 6. Limitations
-
-1. La route `/v1/score` est conservée pour compatibilité et doit être dépréciée.
-2. Les règles V2 restent heuristiques (pas de policy engine réglementaire complet).
-3. La taxonomie d'alertes est encore légère et doit être validée côté risk/compliance.
-4. Le projet est un démonstrateur technique, pas un système réglementaire production.
-
-## 7. Architecture
-
-Le runtime de scoring est unifié autour de l'artefact calibré:
-
-1. Mapping features: `src/models/raw_runtime_feature_adapter.py`
-2. Chargement runtime: `src/models/raw_runtime_loader.py`
-3. API scoring: `/v1/score` (compat) et `/v2/score` (cible)
-4. Décision métier: `src/rules/business_rules.py` (V2)
-5. Alertes structurées: `src/rules/consistency_checks.py`, `POST /v1/review-detailed`
-
-**Deux parcours coexistent:**
-
-```
-┌─────────────────────────────────────────────┐
-│         PARCOURS RÉEL (Analytique)          │
-├─────────────────────────────────────────────┤
-│ notebooks/04 → 05 → 06                      │
-│ Data Zindi → Features → Modèle calibré     │
-│ ↓                                           │
-│ models/logreg_raw.pkl                       │
-│ models/best_threshold.txt                   │
-│ Artifacts: metrics, coefficients, report   │
-└─────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────┐
-│       PARCOURS DÉMO (Application UI)        │
-├─────────────────────────────────────────────┤
-│ Données synthétiques → Modèle baseline      │
-│ API /v2/score ← runtime calibré             │
-│ Streamlit dashboard (single case, batch)    │
-│ Alertes structurées + recommandation        │
-└─────────────────────────────────────────────┘
-
-Both feed runtime_loader → same decision engine
+    Broker->>API: Envoi du dossier
+    API->>Model: Calcul score calibre
+    API->>Agents: Parsing note + checks coherence
+    Model-->>Policy: risk_score
+    Agents-->>Policy: alertes + severite + completude
+    Policy-->>API: recommendation + reason codes
+    API-->>Broker: Score + decision + explication
 ```
 
-**Endpoints API:**
+## Ce que nous avons concretement ameliore
 
-```
-POST /v1/score
-  - Route de compatibilité
-  - Input: features JSON
-  - Output: score_0_1, prediction, alerts
+Le systeme est pense pour la decision underwriting, pas pour le benchmark uniquement.
 
-POST /v2/score  
-  - Route cible (calibrée)
-  - Output: + decision_reason_codes, alert_severity, completeness_bucket
+1. Seuil operationnel optimise
+Le seuil n'est pas fixe a 0.50 par reflexe. Il est choisi pour mieux detecter les dossiers a risque selon l'objectif metier.
 
-POST /v1/review-detailed
-  - Taxonomie d'alertes structurées
-```
+2. Politique de decision explicite
+La recommandation ne depend pas uniquement du score. Elle integre aussi completude et severite des alertes.
 
-## Impact métier à suivre
+3. Traçabilite de la decision
+Chaque decision est accompagnee de motifs exploitables, pas d'un verdict opaque.
 
-KPI recommandés:
+4. Distribution des artefacts propre
+Les artefacts legers restent versionnes dans le repo. Les artefacts lourds runtime sont distribues via GitHub Release pour garder un repo leger.
 
-1. Taux de défauts détectés (proxy recall classe défaut).
-2. Taux de dossiers en revue manuelle (`REVIEW`).
-3. Taux de décisions corrigées après revue humaine.
-4. Délai moyen de décision par dossier (efficacité opérationnelle).
+## Philosophie 
 
-## Démarrage rapide
+Nous faisons volontairement des choix simples:
+
+1. Un modele local leger pour les agents.
+2. Un client HTTP unique pour les appels LLM.
+3. Des schemas de sortie stricts.
+4. Des fallbacks deterministes.
+5. Une baseline sans LLM pour comparer la vraie valeur ajoutee.
+
+Si la version assistee par agents n'apporte pas d'amelioration mesurable, la baseline deterministe reste le mode par defaut.
+
+## Fiabilite et garde-fous
+
+Le systeme est concu pour rester utile meme en cas de panne partielle.
+
+1. Timeout et retries limites pour chaque appel LLM.
+2. Validation de schema avant usage des sorties agents.
+3. Rejet des assertions non supportees.
+4. Fallback local deterministe si sortie invalide.
+5. Continuite de service si Ollama indisponible.
+
+## Qualite et mesure
+
+Notre niveau d'exigence n'est pas une demo visuelle. C'est la preuve mesuree.
+
+Nous suivons notamment:
+1. validite JSON des sorties agents,
+2. precision des alertes reviewer,
+3. coherence summary versus recommendation,
+4. latence p50 et p95,
+5. taux de fallback.
+
+Le benchmark inclut des cas propres, contradictoires, incomplets, bruites et ambigus pour eviter les resultats artificiellement optimistes.
+
+## Etat valide de la phase 1 (modeles, donnees, resultats)
+
+Avant de passer a l'etape agents, voici l'etat reel valide par les artefacts de reference:
+
+1. Donnees traitees presentes et exploitables (train/test/history features).
+2. Runtime scoring actif avec bundle local et API v2 fonctionnelle.
+3. Resultats modeles disponibles avec deux vues complementaires:
+
+- Vue baseline calibree (mesure de reference underwriting):
+    - AUC: 0.7277
+    - Brier: 0.1498
+    - seuil optimal F1: 0.2309
+    - source: `raw_baselines_metrics.csv`
+
+- Vue benchmark challengers (comparaison business entre candidats):
+    - winner_model: `baseline_logreg`
+    - winner_threshold_best_f1: 0.05
+    - source: `challenger_winner.json` / `challenger_metrics.csv`
+
+Note de coherence:
+- Les seuils 0.2309 et 0.05 proviennent de protocoles d'evaluation differents.
+- Il ne s'agit pas d'une contradiction, mais de deux cadres de lecture (baseline calibree vs benchmark challengers).
+
+## Demarrage rapide
+
+### 1) Installer les dependances
 
 ```bash
 make setup
 ```
 
-### Démo API/UI
+### 2) Lancer API et interface
 
 ```bash
 python -m src.data.generate_synthetic_cases
@@ -212,68 +183,11 @@ make run
 streamlit run src/ui/app.py
 ```
 
-**Pages disponibles dans l'application Streamlit:**
+## Mode runtime leger via GitHub Release
 
-| Page | Profil | Utilité |
-|---|---|---|
-| Home | Tous | Pitch, KPIs, navigation |
-| Upload Case | Underwriter | Scorer un dossier, décision immédiate |
-| Case Result | Underwriter | Explorer des cas pré-scorés |
-| Batch Dashboard | Analyste | Traiter un CSV de dossiers |
-| Data Explorer | Analyste | Distributions, variables, défauts |
-| Threshold Simulator | Risk Manager | Simuler l'impact du seuil |
-| Model Performance | Data Scientist | Métriques, benchmark challengers |
-| Methodology | Compliance | Protocole V2, alertes, limites |
+Le repo reste leger: les binaires modeles lourds ne sont pas commits. Ils sont publies en assets de release.
 
-### Parcours réel notebook
-
-1. Vérifier le ZIP Zindi à la racine.
-2. Exécuter les notebooks 04, 05, 06.
-3. Vérifier les artefacts dans `data/processed/` et `models/`.
-4. Construire le bundle runtime:
-
-```bash
-python -m src.models.build_raw_runtime_bundle
-```
-
-## Artefacts publics versionnes
-
-Pour qu'un visiteur externe puisse verifier les resultats sans reconstruire tout le pipeline,
-les artefacts legers suivants sont publies dans le repo:
-
-1. `models/raw_baselines_metrics.csv`
-2. `models/challenger_metrics.csv`
-3. `models/challenger_winner.json`
-4. `models/best_threshold.txt`
-5. `models/model_coefficients.csv`
-6. `models/logreg_raw_runtime_manifest.json`
-7. `data/processed/train_enriched.csv`
-8. `data/processed/train_features.csv`
-9. `data/processed/test_enriched.csv`
-10. `data/processed/test_features.csv`
-11. `data/processed/history_features.csv`
-
-Les binaires de modele (`.pkl`, `.pickle`) restent ignores pour limiter le poids Git
-et eviter les problemes de versionnement des artefacts lourds.
-
-## Regeneration locale
-
-Si ces artefacts manquent localement, vous pouvez les regenerer avec:
-
-```bash
-make setup
-python -m src.models.train_challenger
-python -m src.models.build_raw_runtime_bundle
-```
-
-## Option CLI - GitHub Release (recommandee pour UI/API sans entrainement)
-
-Cette option garde le repo leger et permet a un visiteur externe de lancer
-l'UI/API sans entrainer de modele localement.
-
-### 1) Publier les assets modeles via CLI
-
-Creer la release (une seule fois):
+### Publier les assets
 
 ```bash
 gh auth status
@@ -281,54 +195,27 @@ gh release create v1.0-models \
   --repo BeediGoua/Brokerflow_ai \
   --title "v1.0-models" \
   --notes "Runtime assets for UI/API bootstrap"
-```
 
-Uploader les assets necessaires au runtime:
-
-```bash
 make release-upload
 ```
 
-Cette cible reconstruit automatiquement le bundle runtime avant upload.
-
-Equivalent commande par commande:
-
-```bash
-gh release upload v1.0-models models/logreg_raw_runtime_bundle.joblib --repo BeediGoua/Brokerflow_ai --clobber
-gh release upload v1.0-models models/logreg_raw_runtime_manifest.json --repo BeediGoua/Brokerflow_ai --clobber
-gh release upload v1.0-models models/best_threshold.txt --repo BeediGoua/Brokerflow_ai --clobber
-gh release upload v1.0-models models/model_coefficients.csv --repo BeediGoua/Brokerflow_ai --clobber
-```
-
-### 2) Telecharger et utiliser localement
-
-Telecharger les assets manquants depuis la release:
+### Telecharger les assets
 
 ```bash
 make release-download
-# ou
-python -m src.models.model_release --download
 ```
 
-Le runtime loader utilise ensuite automatiquement ces fichiers. Si le bundle
-runtime est absent au demarrage, il tente un bootstrap automatique depuis la
-release configuree.
+## Positionnement final
 
-### 3) Configuration (optionnelle)
+BrokerFlow AI n'est pas un projet qui ajoute des agents pour faire moderne. C'est un projet qui montre une discipline d'architecture:
 
-Variables d'environnement supportees:
+1. probabilite de risque calculee par un modele tabulaire interpretable,
+2. decision encadree par une policy explicite,
+3. agents utilises comme assistants bornes,
+4. evaluation comparative pour prouver la valeur reelle.
 
-1. `GITHUB_REPO` (defaut: `BeediGoua/Brokerflow_ai`)
-2. `MODEL_RELEASE_TAG` (defaut: `v1.0-models`)
-3. `MODEL_RELEASE_BASE_URL` (si vous voulez forcer une URL custom)
-4. `MODEL_AUTO_DOWNLOAD` (defaut: `true`)
-5. `MODEL_DOWNLOAD_TIMEOUT_SECONDS` (defaut: `45`)
+C'est ce qui rend le projet propre techniquement, credible metier, et defensible en entretien d'ingenierie.
 
-## Documentation associée
+## Documentation detaillee
 
-1. `evaluation.md`: protocole, métriques, biais et comparaisons.
-2. `docs/raw_dataset_integration.md`
-3. `docs/data_dictionary.md`
-4. `docs/model_card.md`
-5. `docs/architecture.md`
-6. `docs/demo_script.md`
+Pour le detail complet de la strategie agents, voir [docs/agents_strategy_ollama_smolagents.md](docs/agents_strategy_ollama_smolagents.md).

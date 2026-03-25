@@ -1,6 +1,4 @@
-[
-    project
-]
+[project]
 name = "brokerflow-ai"
 version = "0.1.0"
 description = "Underwriting copilot with synthetic data, ML pipeline, agents and API"
