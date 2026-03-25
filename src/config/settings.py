@@ -31,6 +31,12 @@ class Settings(BaseSettings):
     raw_runtime_threshold_path: str = "models/best_threshold.txt"
     raw_runtime_coefficients_path: str = "models/model_coefficients.csv"
 
+    github_repo: str = "BeediGoua/Brokerflow_ai"
+    model_release_tag: str = "v1.0-models"
+    model_release_base_url: str | None = None
+    model_auto_download: bool = True
+    model_download_timeout_seconds: int = 45
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"

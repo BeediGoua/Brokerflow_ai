@@ -1,0 +1,9 @@
+stage,n_features
+raw_numeric,20
+after_id_filter,18
+after_missing_filter,17
+after_variance_filter,17
+after_corr_filter_numeric,13
+after_add_business_segments,29
+after_stat_screen,26
+after_l1_final,21

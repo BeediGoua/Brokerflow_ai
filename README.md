@@ -236,6 +236,94 @@ streamlit run src/ui/app.py
 python -m src.models.build_raw_runtime_bundle
 ```
 
+## Artefacts publics versionnes
+
+Pour qu'un visiteur externe puisse verifier les resultats sans reconstruire tout le pipeline,
+les artefacts legers suivants sont publies dans le repo:
+
+1. `models/raw_baselines_metrics.csv`
+2. `models/challenger_metrics.csv`
+3. `models/challenger_winner.json`
+4. `models/best_threshold.txt`
+5. `models/model_coefficients.csv`
+6. `models/logreg_raw_runtime_manifest.json`
+7. `data/processed/train_enriched.csv`
+8. `data/processed/train_features.csv`
+9. `data/processed/test_enriched.csv`
+10. `data/processed/test_features.csv`
+11. `data/processed/history_features.csv`
+
+Les binaires de modele (`.pkl`, `.pickle`) restent ignores pour limiter le poids Git
+et eviter les problemes de versionnement des artefacts lourds.
+
+## Regeneration locale
+
+Si ces artefacts manquent localement, vous pouvez les regenerer avec:
+
+```bash
+make setup
+python -m src.models.train_challenger
+python -m src.models.build_raw_runtime_bundle
+```
+
+## Option CLI - GitHub Release (recommandee pour UI/API sans entrainement)
+
+Cette option garde le repo leger et permet a un visiteur externe de lancer
+l'UI/API sans entrainer de modele localement.
+
+### 1) Publier les assets modeles via CLI
+
+Creer la release (une seule fois):
+
+```bash
+gh auth status
+gh release create v1.0-models \
+  --repo BeediGoua/Brokerflow_ai \
+  --title "v1.0-models" \
+  --notes "Runtime assets for UI/API bootstrap"
+```
+
+Uploader les assets necessaires au runtime:
+
+```bash
+make release-upload
+```
+
+Cette cible reconstruit automatiquement le bundle runtime avant upload.
+
+Equivalent commande par commande:
+
+```bash
+gh release upload v1.0-models models/logreg_raw_runtime_bundle.joblib --repo BeediGoua/Brokerflow_ai --clobber
+gh release upload v1.0-models models/logreg_raw_runtime_manifest.json --repo BeediGoua/Brokerflow_ai --clobber
+gh release upload v1.0-models models/best_threshold.txt --repo BeediGoua/Brokerflow_ai --clobber
+gh release upload v1.0-models models/model_coefficients.csv --repo BeediGoua/Brokerflow_ai --clobber
+```
+
+### 2) Telecharger et utiliser localement
+
+Telecharger les assets manquants depuis la release:
+
+```bash
+make release-download
+# ou
+python -m src.models.model_release --download
+```
+
+Le runtime loader utilise ensuite automatiquement ces fichiers. Si le bundle
+runtime est absent au demarrage, il tente un bootstrap automatique depuis la
+release configuree.
+
+### 3) Configuration (optionnelle)
+
+Variables d'environnement supportees:
+
+1. `GITHUB_REPO` (defaut: `BeediGoua/Brokerflow_ai`)
+2. `MODEL_RELEASE_TAG` (defaut: `v1.0-models`)
+3. `MODEL_RELEASE_BASE_URL` (si vous voulez forcer une URL custom)
+4. `MODEL_AUTO_DOWNLOAD` (defaut: `true`)
+5. `MODEL_DOWNLOAD_TIMEOUT_SECONDS` (defaut: `45`)
+
 ## Documentation associée
 
 1. `evaluation.md`: protocole, métriques, biais et comparaisons.

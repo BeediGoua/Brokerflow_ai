@@ -1,0 +1,5 @@
+{
+  "winner_model": "baseline_logreg",
+  "selection_rule": "0.45*recall@best + 0.35*f1@best + 0.15*roc_auc - 0.05*brier",
+  "winner_threshold_best_f1": 0.05
+}

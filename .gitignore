@@ -1,11 +1,24 @@
+# Python / local environment
 __pycache__/
-*.pyc
-.env
+*.py[cod]
 .pytest_cache/
-data/processed/
+.venv/
+.env
+*.log
+.DS_Store
+
+
+# Data artifacts
 data/synthetic/
-models/
+data/processed/*
+!data/processed/*.csv
+
+# Model artifacts: keep lightweight/public files only
+models/*
+!models/*.csv
+!models/*.json
+!models/*.txt
+
+# Keep binary model objects private/heavy
 *.pkl
 *.pickle
-*.log
-*.DS_Store
